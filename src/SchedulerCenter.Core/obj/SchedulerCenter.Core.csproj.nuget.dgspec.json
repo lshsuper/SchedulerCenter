@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\projects\\调度配置\\Code\\SchedulerCenter\\SchedulerCenter.Core\\SchedulerCenter.Core.csproj": {}
+    "D:\\projects\\调度配置\\Code\\SchedulerCenter\\src\\SchedulerCenter.Core\\SchedulerCenter.Core.csproj": {}
   },
   "projects": {
-    "D:\\projects\\调度配置\\Code\\SchedulerCenter\\SchedulerCenter.Core\\SchedulerCenter.Core.csproj": {
+    "D:\\projects\\调度配置\\Code\\SchedulerCenter\\src\\SchedulerCenter.Core\\SchedulerCenter.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\projects\\调度配置\\Code\\SchedulerCenter\\SchedulerCenter.Core\\SchedulerCenter.Core.csproj",
+        "projectUniqueName": "D:\\projects\\调度配置\\Code\\SchedulerCenter\\src\\SchedulerCenter.Core\\SchedulerCenter.Core.csproj",
         "projectName": "SchedulerCenter.Core",
-        "projectPath": "D:\\projects\\调度配置\\Code\\SchedulerCenter\\SchedulerCenter.Core\\SchedulerCenter.Core.csproj",
+        "projectPath": "D:\\projects\\调度配置\\Code\\SchedulerCenter\\src\\SchedulerCenter.Core\\SchedulerCenter.Core.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "D:\\projects\\调度配置\\Code\\SchedulerCenter\\SchedulerCenter.Core\\obj\\",
+        "outputPath": "D:\\projects\\调度配置\\Code\\SchedulerCenter\\src\\SchedulerCenter.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

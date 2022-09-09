@@ -1,11 +1,11 @@
 
-/SchedulerCenter
-/SchedulerCenter.Host/bin
-/SchedulerCenter.Host/obj
+src/SchedulerCenter
+src/SchedulerCenter.Host/bin
+src/SchedulerCenter.Host/obj
 .vs
 packages/*
-SchedulerCenter.Application/bin
-SchedulerCenter.Application/obj
+src/SchedulerCenter.Application/bin
+src/SchedulerCenter.Application/obj
 
-SchedulerCenter.Infrastructure/bin
-SchedulerCenter.Infrastructure/obj
+src/SchedulerCenter.Infrastructure/bin
+src/SchedulerCenter.Infrastructure/obj
