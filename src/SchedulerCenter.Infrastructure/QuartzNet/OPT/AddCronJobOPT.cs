@@ -13,7 +13,6 @@ namespace SchedulerCenter.Infrastructure.QuartzNet.OPT
         public string TriggerGroup { get; set; }
         public string Cron { get; set; }
         public string Descr { get; set; }
-
         public IDictionary<string, object> JobData { get; set; }
     }
 }

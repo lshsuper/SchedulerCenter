@@ -30,7 +30,7 @@ namespace SchedulerCenter.Infrastructure.QuartzNet
         /// <param name="applicationBuilder"></param>
         /// <param name="env"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseQuartz(this IApplicationBuilder applicationBuilder)
+        public static IApplicationBuilder UseQuartz(this IApplicationBuilder applicationBuilder,string schedulerName)
         {
 
 
@@ -40,7 +40,7 @@ namespace SchedulerCenter.Infrastructure.QuartzNet
             //初始化
             quartzProvider.Init().GetAwaiter();
             //启动
-            quartzProvider.Start();
+            quartzProvider.Start(schedulerName);
 
          
             return applicationBuilder;

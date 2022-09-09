@@ -115,7 +115,7 @@ namespace SchedulerCenter.Host
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
-            app.UseQuartz().UseStaticHttpContext();
+            app.UseQuartz(Configuration["SchedulerName"]).UseStaticHttpContext();
             app.UseStaticFiles();
             app.UseAuthentication();
             //app.UseMvc();
