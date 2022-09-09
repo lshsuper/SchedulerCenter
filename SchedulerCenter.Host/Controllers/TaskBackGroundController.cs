@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SchedulerCenter.Host.Attr;
-using SchedulerCenter.Host.Extensions;
-using SchedulerCenter.Host.Models;
-using SchedulerCenter.Host.Service;
-using SchedulerCenter.Host.Utility;
+
 using Quartz.Spi;
 using System.Threading.Tasks;
+using SchedulerCenter.Core.Option;
+using SchedulerCenter.Application.Services;
 
 namespace SchedulerCenter.Host.Controllers
 {
@@ -50,32 +49,32 @@ namespace SchedulerCenter.Host.Controllers
         /// <param name="taskOptions"></param>
         /// <returns></returns>
         [TaskAuthor]
-        public async Task<IActionResult> Add(TaskOptions taskOptions)
+        public async Task<IActionResult> Add(TaskOPT taskOptions)
         {
             return Json(await _jobService.AddJob(taskOptions));
         }
         [TaskAuthor]
-        public async Task<IActionResult> Remove(TaskOptions taskOptions)
+        public async Task<IActionResult> Remove(TaskOPT taskOptions)
         {
             return Json(await _jobService.RemoveJob(taskOptions.TaskName,taskOptions.GroupName));
         }
         [TaskAuthor]
-        public async Task<IActionResult> Update(TaskOptions taskOptions)
+        public async Task<IActionResult> Update(TaskOPT taskOptions)
         {
             return Json(await _jobService.UpdateJob(taskOptions));
         }
         [TaskAuthor]
-        public async Task<IActionResult> Pause(TaskOptions taskOptions)
+        public async Task<IActionResult> Pause(TaskOPT taskOptions)
         {
             return Json(await _jobService.PauseJob(taskOptions.TaskName,taskOptions.GroupName));
         }
         [TaskAuthor]
-        public async Task<IActionResult> Start(TaskOptions taskOptions)
+        public async Task<IActionResult> Start(TaskOPT taskOptions)
         {
             return Json(await _jobService.StartJob(taskOptions.TaskName,taskOptions.GroupName));
         }
         [TaskAuthor]
-        public async Task<IActionResult> Run(TaskOptions taskOptions)
+        public async Task<IActionResult> Run(TaskOPT taskOptions)
         {
             return Json(await _jobService.RunJob(taskOptions.GroupName,taskOptions.TaskName));
         }

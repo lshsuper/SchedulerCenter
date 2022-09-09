@@ -10,15 +10,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
-using Quartz.Impl;
-using SchedulerCenter.Host.Extensions;
 using SchedulerCenter.Host.Filters;
-using SchedulerCenter.Host.Service;
-using SchedulerCenter.Host.Utility;
-using SchedulerCenter.Host.Utility.QuartzNet;
+using SchedulerCenter.Infrastructure.Utility;
+using SchedulerCenter.Infrastructure.QuartzNet;
 using System;
-using SchedulerCenter.Host.Utility.Dapper;
-
+using SchedulerCenter.Infrastructure.Dapper;
+using SchedulerCenter.Infrastructure.QuartzNet.OPT;
+using SchedulerCenter.Application.Services;
+using SchedulerCenter.Infrastructure.Extensions;
 namespace SchedulerCenter.Host
 {
     public class Startup
@@ -71,11 +70,11 @@ namespace SchedulerCenter.Host
             services.AddHttpContextAccessor();
             services.AddHttpClient();
             services.AddSession().AddMemoryCache();
-            services.AddSingleton<IPathProvider, PathProvider>();
+          
             services.AddSingleton<JobService>();
            
            
-            services.AddQuartz(new Utility.QuartzNet.OPT.InitConfig { 
+            services.AddQuartz(new InitConfig { 
             
                 ConnectionString= Configuration.GetConnectionString("connStr"),
                 DbProviderName= Configuration["DbProvider"]
@@ -116,7 +115,7 @@ namespace SchedulerCenter.Host
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
-            app.UseQuartz(env).UseStaticHttpContext();
+            app.UseQuartz().UseStaticHttpContext();
             app.UseStaticFiles();
             app.UseAuthentication();
             //app.UseMvc();

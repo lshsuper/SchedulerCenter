@@ -6,3 +6,6 @@
 packages/*
 SchedulerCenter.Application/bin
 SchedulerCenter.Application/obj
+
+SchedulerCenter.Infrastructure/bin
+SchedulerCenter.Infrastructure/obj

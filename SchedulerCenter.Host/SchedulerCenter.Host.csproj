@@ -19,14 +19,17 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="MySql.Data" Version="8.0.30" />
-    <PackageReference Include="Quartz" Version="3.0.7" />
-    <PackageReference Include="Quartz.Serialization.Json" Version="3.0.7" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Enum\" />
     <Folder Include="Views\TaskBackGround\" />
     <Folder Include="wwwroot\images\example\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SchedulerCenter.Application\SchedulerCenter.Application.csproj" />
+    <ProjectReference Include="..\SchedulerCenter.Core\SchedulerCenter.Core.csproj" />
+    <ProjectReference Include="..\SchedulerCenter.Infrastructure\SchedulerCenter.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

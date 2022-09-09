@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SchedulerCenter.Core\SchedulerCenter.Core.csproj" />
+    <ProjectReference Include="..\SchedulerCenter.Infrastructure\SchedulerCenter.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

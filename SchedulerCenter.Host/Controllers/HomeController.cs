@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-using SchedulerCenter.Host.Extensions;
 using System;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-
+using SchedulerCenter.Infrastructure.Extensions;
 namespace SchedulerCenter.Host.Controllers
 {
     public class HomeController : Controller

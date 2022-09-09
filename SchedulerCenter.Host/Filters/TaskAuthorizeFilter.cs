@@ -7,7 +7,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using SchedulerCenter.Host.Attr;
-using SchedulerCenter.Host.Utility;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
