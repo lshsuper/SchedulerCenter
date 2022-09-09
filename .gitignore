@@ -1,0 +1,8 @@
+
+/SchedulerCenter
+/SchedulerCenter.Host/bin
+/SchedulerCenter.Host/obj
+.vs
+packages/*
+SchedulerCenter.Application/bin
+SchedulerCenter.Application/obj

@@ -1,0 +1,87 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using SchedulerCenter.Host.Attr;
+using SchedulerCenter.Host.Extensions;
+using SchedulerCenter.Host.Models;
+using SchedulerCenter.Host.Service;
+using SchedulerCenter.Host.Utility;
+using Quartz.Spi;
+using System.Threading.Tasks;
+
+namespace SchedulerCenter.Host.Controllers
+{
+
+    public class TaskBackGroundController : Controller
+    {
+      
+      
+        private readonly JobService _jobService;
+        public TaskBackGroundController(JobService jobService)
+        {
+            _jobService = jobService;
+        }
+
+        public IActionResult Index()
+        {
+            return View("~/Views/TaskBackGround/Index.cshtml");
+        }
+
+        /// <summary>
+        /// 获取所有的作业
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> GetJobs()
+        {
+            return Json(await _jobService.GetJobs());
+        }
+        /// <summary>
+        /// 获取作业运行日志
+        /// </summary>
+        /// <param name="taskName"></param>
+        /// <param name="groupName"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> GetRunLog(string taskName, string groupName, int page = 1)
+        {
+            return Json(await _jobService.GetJobLogPage(taskName, groupName, page));
+        }
+        /// <summary>
+        /// 添加任务
+        /// </summary>
+        /// <param name="taskOptions"></param>
+        /// <returns></returns>
+        [TaskAuthor]
+        public async Task<IActionResult> Add(TaskOptions taskOptions)
+        {
+            return Json(await _jobService.AddJob(taskOptions));
+        }
+        [TaskAuthor]
+        public async Task<IActionResult> Remove(TaskOptions taskOptions)
+        {
+            return Json(await _jobService.RemoveJob(taskOptions.TaskName,taskOptions.GroupName));
+        }
+        [TaskAuthor]
+        public async Task<IActionResult> Update(TaskOptions taskOptions)
+        {
+            return Json(await _jobService.UpdateJob(taskOptions));
+        }
+        [TaskAuthor]
+        public async Task<IActionResult> Pause(TaskOptions taskOptions)
+        {
+            return Json(await _jobService.PauseJob(taskOptions.TaskName,taskOptions.GroupName));
+        }
+        [TaskAuthor]
+        public async Task<IActionResult> Start(TaskOptions taskOptions)
+        {
+            return Json(await _jobService.StartJob(taskOptions.TaskName,taskOptions.GroupName));
+        }
+        [TaskAuthor]
+        public async Task<IActionResult> Run(TaskOptions taskOptions)
+        {
+            return Json(await _jobService.RunJob(taskOptions.GroupName,taskOptions.TaskName));
+        }
+    }
+
+
+
+
+}
