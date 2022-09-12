@@ -1,0 +1,119 @@
+﻿@{
+    ViewData["Title"] = "系统设置";
+    Layout = "~/Views/Shared/Vue.cshtml";
+}
+
+<style>
+    #setting-container {
+        margin:5px;
+    }
+</style>
+
+<div id="setting-container">
+
+    <Tabs type="card" @@on-click="clickTag" v-model="tabSel">
+        <Tab-Pane label="节点配置" v-if="tab0">
+
+            <i-Table border ref="selection" :columns="nodeColumns" :data="nodeData"></i-Table>
+            <i-Button @@click="handleSelectAll(true)">Set all selected</i-Button>
+            <i-Button @@click="handleSelectAll(false)">Cancel all selected</i-Button>
+
+
+        </Tab-Pane>
+        <Tab-Pane label="标签三" v-if="tab1">标签三的内容</Tab-Pane>
+    </Tabs>
+   
+   
+
+</div>
+
+
+<script>
+
+    var $settingVue = new Vue({
+       
+        el: "#setting-container",
+        data() {
+            return {
+                tabSel:1,
+                tab0: true,
+                tab1: true,
+              
+                nodeColumns: [
+                    {
+                        title: '调度器名称',
+                        key: 'schedName'
+                    },
+                    {
+                        title: '地址',
+                        key: 'addr'
+                    },{
+                        title: '操作',
+                        key: 'action',
+                        width: 150,
+                        align: 'center',
+                        render: (h, params) => {
+                            return h('div', [
+                               
+                                h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.remove(params.index)
+                                        }
+                                    }
+                                }, '停用')
+                            ]);
+                        }
+                    }
+                ],
+                nodeData: [
+                  
+                ]
+            }
+        },
+        methods: {
+            handleSelectAll(status) {
+                this.$refs.selection.selectAll(status);
+            },
+            handleTabRemove(name) {
+                this['tab' + name] = false;
+            },
+
+            getNodes: function () {
+
+                var self = this;
+                utils.ajax(this, "/Setting/GetNodes", {}, function (data) {
+
+                    self.nodeData = data;
+
+                });
+
+
+            },
+
+            clickTag: function (data) {
+
+
+                alert(data);
+
+
+            },
+            
+        }, created: function () {
+
+
+            //加载数据(默认选中node-list)
+            this.tabSel = 0;
+            this.getNodes();
+
+
+        }
+   
+
+    });
+
+</script>

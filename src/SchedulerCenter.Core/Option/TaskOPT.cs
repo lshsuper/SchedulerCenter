@@ -15,5 +15,7 @@ namespace SchedulerCenter.Core.Option
         public string RequestType { get; set; }
         public DateTime? LastRunTime { get; set; }
         public int Status { get; set; }
+
+        public string SchedulerName { get; set; }
     }
 }

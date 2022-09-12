@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using Quartz;
 using SchedulerCenter.Infrastructure.QuartzNet.OPT;
 using System.Collections.Concurrent;
+using Quartz.Core;
+using Quartz.Spi;
 
 namespace SchedulerCenter.Infrastructure.QuartzNet
 {
@@ -21,9 +23,6 @@ namespace SchedulerCenter.Infrastructure.QuartzNet
  
     public class QuartzProvider
     {
-
-
-        private  ConcurrentDictionary<string,IScheduler> schedulers;
         /// <summary>
         /// 数据连接
         /// </summary>
@@ -33,15 +32,17 @@ namespace SchedulerCenter.Infrastructure.QuartzNet
         /// </summary>
         private string driverDelegateType;
 
+        private DirectSchedulerFactory factory;
 
-        public QuartzProvider(InitConfig conf) {
-
-
-            InitDbProvider(conf.DbProviderName, conf.ConnectionString);
-            InitDriverDelegateType(conf.DbProviderName);
-            schedulers = new ConcurrentDictionary<string, IScheduler>();
+     
 
 
+        public QuartzProvider() {
+
+
+           
+
+       
         }
 
         public IDbProvider GetDbProvider() {
@@ -56,9 +57,29 @@ namespace SchedulerCenter.Infrastructure.QuartzNet
         /// 初始化
         /// </summary>
         /// <returns></returns>
-        public async Task Init(string []schedulerNames) {
+        public async Task Init(InitConfig conf) { 
+
+            InitDbProvider(conf.DbProviderName, conf.ConnectionString);
+            InitDriverDelegateType(conf.DbProviderName); 
 
             DBConnectionManager.Instance.AddConnectionProvider("default", dbProvider);
+            CreateScheduler(conf.SchedulerName);
+            var scheduler = await SchedulerRepository.Instance.Lookup(conf.SchedulerName);
+            await scheduler.Start();
+
+        }
+
+
+        public Task<IReadOnlyList<IScheduler>> GetAllSchedulers() {
+
+           return  factory.GetAllSchedulers();
+        
+        }
+
+
+        public void CreateScheduler(string schedulerName)
+        {
+
             var serializer = new JsonObjectSerializer();
             serializer.Initialize();
             var jobStore = new JobStoreTX
@@ -66,44 +87,53 @@ namespace SchedulerCenter.Infrastructure.QuartzNet
                 DataSource = "default",
                 TablePrefix = "QRTZ_",
                 InstanceId = "AUTO",
+                InstanceName = schedulerName,
                 DriverDelegateType = driverDelegateType,
                 ObjectSerializer = serializer,
+                ClusterCheckinInterval = TimeSpan.FromSeconds(20),
+                Clustered = true,     //启用集群模式
+                UseDBLocks = true,   //使用数据库锁
+
             };
-            
-            foreach (var schedulerName in schedulerNames)
-            {
-                DirectSchedulerFactory.Instance.CreateScheduler(schedulerName, "AUTO", new DefaultThreadPool(), jobStore);
-                var scheduler = await SchedulerRepository.Instance.Lookup(schedulerName);
-                schedulers.TryAdd<string,IScheduler>(schedulerName,scheduler);
-            }
 
-            
+            factory = DirectSchedulerFactory.Instance;
+            factory.CreateScheduler(schedulerName, "AUTO", new DefaultThreadPool(), jobStore);
+
         }
 
 
-        public Task Start(string schedulerName) {
-            return schedulers[schedulerName].Start();
+        public Task<IScheduler> GetScheduler(string schedulerName) {
+
+            return factory.GetScheduler(schedulerName);
         }
-
-
        
-        public Task PauseTrigger(string schedulerName,string triggerKey,string triggerGroup) {
-            return schedulers[schedulerName].PauseTrigger(new TriggerKey(triggerKey, triggerGroup));
+        public async Task PauseTrigger(string schedulerName, string triggerKey,string triggerGroup) {
+
+            var scheduler = await GetScheduler(schedulerName);
+            await scheduler.PauseTrigger(new TriggerKey(triggerKey, triggerGroup));
+            return;
         }
 
      
-        public Task UnscheduleJob(string schedulerName,string triggerKey,string triggerGroup) {
-            return schedulers[schedulerName].UnscheduleJob(new TriggerKey(triggerKey, triggerGroup));
+        public async Task UnscheduleJob(string schedulerName, string triggerKey,string triggerGroup) {
+            var  scheduler = await GetScheduler(schedulerName);
+            await scheduler.UnscheduleJob(new TriggerKey(triggerKey, triggerGroup));
+            return ;
         }
 
-        public Task DeleteJob(string schedulerName,string jobName,string jobGroup) {
-            return schedulers[schedulerName].DeleteJob(JobKey.Create(jobName,jobGroup));
+        public async Task DeleteJob(string schedulerName,string jobName,string jobGroup) {
+
+            var scheduler = await GetScheduler(schedulerName);
+            await scheduler.DeleteJob(JobKey.Create(jobName, jobGroup));
+            return ;
         }
 
-        public Task Stop(string schedulerName) {
-
-            return schedulers[schedulerName].Clear();
-        
+        public async Task Stop(string schedulerName, string jobName) {
+            var scheduler = await GetScheduler(schedulerName);
+            if (!scheduler.IsShutdown) {
+                await  scheduler.Shutdown();
+            }
+            return;
         }
 
 
@@ -117,14 +147,15 @@ namespace SchedulerCenter.Infrastructure.QuartzNet
 
         }
 
-        public Task<bool> JobExists(string schedulerName,string tName, string gName)
+        public async Task<bool> JobExists(string schedulerName,string tName, string gName)
         {
-            return schedulers[schedulerName].CheckExists(JobKey.Create(tName, gName));
+            var scheduler = await GetScheduler(schedulerName);
+            return await scheduler.CheckExists(JobKey.Create(tName, gName));
         }
 
-        public async Task<bool> AddCronJob<T>(string schedulerName,AddCronJobOPT opt) where T : IJob
+        public async Task<bool> AddCronJob<T>(AddCronJobOPT opt) where T : IJob
         {
-
+            var scheduler = await GetScheduler(opt.SchedulerName);
             IJobDetail job = JobBuilder.Create<T>().SetJobData(new JobDataMap(opt.JobData)).WithDescription(opt.Descr).WithIdentity(opt.JobName, opt.JobGroup)
                  .Build();
             ITrigger trigger = TriggerBuilder.Create().UsingJobData(new JobDataMap(opt.JobData))
@@ -134,59 +165,63 @@ namespace SchedulerCenter.Infrastructure.QuartzNet
                .WithCronSchedule(opt.Cron)
                .Build();
 
-            await schedulers[schedulerName].ScheduleJob(job, trigger);
+            await scheduler.ScheduleJob(job, trigger);
             return true;
 
         }
 
 
-        public Task<IJobDetail> GetJobDetail(string schedulerName,string jobGroup, string jobName) {
+        public async Task<IJobDetail> GetJobDetail(string schedulerName, string jobGroup, string jobName) {
 
-
-           return schedulers[schedulerName].GetJobDetail(JobKey.Create(jobName,jobGroup));
-
-
-        }
-
-        public Task ResumeTrigger(string schedulerName, string triggerName,string triggerGroup) {
-
-
-            return schedulers[schedulerName].ResumeTrigger(new TriggerKey(triggerName, triggerGroup));
-
-        }
-
-
-        public Task<IReadOnlyCollection<string>> GetJobGroupNames(string schedulerName) {
-
-
-            return  schedulers[schedulerName].GetJobGroupNames();
-
-        }
-
-
-        public Task<IReadOnlyCollection<JobKey>> GetJobKeys(string schedulerName,string jobGroup) {
-
-
-            return schedulers[schedulerName].GetJobKeys(GroupMatcher<JobKey>.GroupEquals(jobGroup));
-
-        }
-
-        public Task<IReadOnlyCollection<ITrigger>> GetTriggersOfJob(string schedulerName,string jobGroup,string jobName) {
-
-            return schedulers[ schedulerName].GetTriggersOfJob(JobKey.Create(jobName, jobGroup));
+            var scheduler = await GetScheduler(schedulerName);
+            return  await scheduler.GetJobDetail(JobKey.Create(jobName,jobGroup));
 
 
         }
 
-        public  Task<TriggerState> GetTriggerState(string schedulerName, string triggerGroup, string triggerKey)
+        public async Task ResumeTrigger(string schedulerName,string triggerName,string triggerGroup) {
+
+            var scheduler = await GetScheduler(schedulerName);
+            await scheduler.ResumeTrigger(new TriggerKey(triggerName, triggerGroup));
+            return;
+
+        }
+
+
+        public async Task<IReadOnlyCollection<string>> GetJobGroupNames(string schedulerName) {
+
+            var scheduler = await GetScheduler(schedulerName);
+            return  await scheduler.GetJobGroupNames();
+
+        }
+
+
+        public async Task<IReadOnlyCollection<JobKey>> GetJobKeys(string schedulerName, string jobGroup) {
+
+            var scheduler = await GetScheduler(schedulerName);
+            return await scheduler.GetJobKeys(GroupMatcher<JobKey>.GroupEquals(jobGroup));
+
+        }
+
+        public async Task<IReadOnlyCollection<ITrigger>> GetTriggersOfJob(string schedulerName, string jobGroup,string jobName) {
+            var scheduler = await GetScheduler(schedulerName);
+            return await scheduler.GetTriggersOfJob(JobKey.Create(jobName, jobGroup));
+
+
+        }
+
+        public  async Task<TriggerState> GetTriggerState(string schedulerName, string triggerGroup, string triggerKey)
         {
-            return schedulers[schedulerName].GetTriggerState(new TriggerKey(triggerKey,triggerGroup));
+            var scheduler = await GetScheduler(schedulerName);
+            return  await scheduler.GetTriggerState(new TriggerKey(triggerKey,triggerGroup));
 
         }
 
-        public Task TriggerJob(string schedulerName, string jobGroup,string jobName)
+        public async Task TriggerJob(string schedulerName, string jobGroup,string jobName)
         {
-            return schedulers[schedulerName].TriggerJob(JobKey.Create(jobName,jobGroup));
+            var scheduler = await GetScheduler(schedulerName);
+            await scheduler.TriggerJob(JobKey.Create(jobName, jobGroup));
+            return;
 
         }
 

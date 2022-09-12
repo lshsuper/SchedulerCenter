@@ -16,10 +16,10 @@ namespace SchedulerCenter.Infrastructure.QuartzNet
         /// </summary>
         /// <param name="services"></param>
         /// <param name="conf"></param>
-        public static void AddQuartz(this IServiceCollection services,  InitConfig conf)
+        public static void AddQuartz(this IServiceCollection services)
         {
 
-            services.AddSingleton(new QuartzProvider(conf));
+            services.AddSingleton(new QuartzProvider());
 
         }
 
@@ -30,7 +30,7 @@ namespace SchedulerCenter.Infrastructure.QuartzNet
         /// <param name="applicationBuilder"></param>
         /// <param name="env"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseQuartz(this IApplicationBuilder applicationBuilder,string schedulerName)
+        public static IApplicationBuilder UseQuartz(this IApplicationBuilder applicationBuilder, InitConfig conf)
         {
 
 
@@ -38,11 +38,8 @@ namespace SchedulerCenter.Infrastructure.QuartzNet
 
             var quartzProvider = services.GetService<QuartzProvider>();
             //初始化
-            quartzProvider.Init().GetAwaiter();
-            //启动
-            quartzProvider.Start(schedulerName);
-
-         
+            quartzProvider.Init(conf).GetAwaiter();
+           
             return applicationBuilder;
         }
 

@@ -14,6 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SchedulerCenter.Core.Constant;
 using SchedulerCenter.Infrastructure.Extensions;
+using SchedulerCenter.Core.DTO;
 
 namespace SchedulerCenter.Application.Services
 {
@@ -36,12 +37,12 @@ namespace SchedulerCenter.Application.Services
             //验证表达式
             if (!_provider.CheckCron(opt.Interval)){ return ApiResult<bool>.Error("表达式格式不正确"); }
             //存在当前分组-任务名的任务
-            if (_provider.JobExists(opt.TaskName, opt.GroupName).Result) { return ApiResult<bool>.Error("任务已存在"); }
+            if (_provider.JobExists(opt.SchedulerName,opt.TaskName, opt.GroupName).Result) { return ApiResult<bool>.Error("任务已存在"); }
 
             try
             {
 
-                var res =await _provider.AddCronJob<HttpJob>(new AddCronJobOPT {
+                var res =await _provider.AddCronJob<HttpJob>( new AddCronJobOPT {
                 
                     TriggerGroup=opt.GroupName,
                     TriggerName=opt.TaskName,
@@ -80,17 +81,17 @@ namespace SchedulerCenter.Application.Services
         /// <param name="jobName"></param>
         /// <param name="jobGroup"></param>
         /// <returns></returns>
-        public async Task<ApiResult<bool>> RemoveJob(string jobName,string jobGroup) {
+        public async Task<ApiResult<bool>> RemoveJob(string schedulerName, string jobName,string jobGroup) {
 
 
             try
             {
 
-                //1.当前job-remove
-                var job = await _provider.GetJobDetail(jobName, jobGroup);
-                await _provider.PauseTrigger(jobName, jobGroup);
-                await _provider.UnscheduleJob(jobName, jobGroup);// 移除触发器
-                await _provider.DeleteJob(jobName, jobGroup);
+                ////1.当前job-remove
+                var job = await _provider.GetJobDetail(schedulerName,jobName, jobGroup);
+                await _provider.PauseTrigger(schedulerName,jobName, jobGroup);
+                await _provider.UnscheduleJob(schedulerName,jobName, jobGroup);// 移除触发器
+                await _provider.DeleteJob(schedulerName,jobName, jobGroup);
 
                 return ApiResult<bool>.OK(true, "任务删除成功");
 
@@ -123,12 +124,12 @@ namespace SchedulerCenter.Application.Services
                 //验证表达式
                 if (!_provider.CheckCron(opt.Interval)) { return ApiResult<bool>.Error("表达式格式不正确"); }
                 //存在当前分组-任务名的任务
-                if (_provider.JobExists(opt.TaskName, opt.GroupName).Result) { return ApiResult<bool>.Error("任务已存在"); }
+                if (_provider.JobExists(opt.SchedulerName,opt.TaskName, opt.GroupName).Result) { return ApiResult<bool>.Error("任务已存在"); }
 
                 //1.清除
-                await _provider.PauseTrigger(opt.TaskName, opt.GroupName);
-                await _provider.UnscheduleJob(opt.TaskName, opt.GroupName);// 移除触发器
-                await _provider.DeleteJob(opt.TaskName, opt.GroupName);
+                await _provider.PauseTrigger(opt.SchedulerName,opt.TaskName, opt.GroupName);
+                await _provider.UnscheduleJob(opt.SchedulerName,opt.TaskName, opt.GroupName);// 移除触发器
+                await _provider.DeleteJob(opt.SchedulerName,opt.TaskName, opt.GroupName);
                 
                 //2.新构建
                 var res = await _provider.AddCronJob<HttpJob>(new AddCronJobOPT
@@ -175,11 +176,11 @@ namespace SchedulerCenter.Application.Services
         /// <param name="triggerName"></param>
         /// <param name="triggerGroup"></param>
         /// <returns></returns>
-        public async Task<ApiResult<bool>> StartJob(string triggerName,string triggerGroup) {
+        public async Task<ApiResult<bool>> StartJob(string schedulerName, string triggerName,string triggerGroup) {
             try
             {
 
-                await _provider.ResumeTrigger(triggerName, triggerGroup);
+                await _provider.ResumeTrigger(schedulerName,triggerName, triggerGroup);
 
                 return ApiResult<bool>.OK(true, "任务启动成功");
             }
@@ -196,12 +197,12 @@ namespace SchedulerCenter.Application.Services
         /// <param name="triggerName"></param>
         /// <param name="triggerGroup"></param>
         /// <returns></returns>
-        public async Task<ApiResult<bool>> PauseJob(string triggerName, string triggerGroup)
+        public async Task<ApiResult<bool>> PauseJob(string schedulerName, string triggerName, string triggerGroup)
         {
             try
             {
 
-                await _provider.PauseTrigger(triggerName, triggerGroup);
+                await _provider.PauseTrigger(schedulerName,triggerName, triggerGroup);
 
                 return ApiResult<bool>.OK(true, "任务暂停成功");
             }
@@ -217,31 +218,32 @@ namespace SchedulerCenter.Application.Services
         /// 获取任务列表
         /// </summary>
         /// <returns></returns>
-        public  async Task<List<TaskOPT>> GetJobs()
+        public  async Task<List<TaskOPT>> GetJobs(string schedulerName)
         {
            
             try
             {
                 List<TaskOPT> list = new List<TaskOPT>();
-                var groups = await _provider.GetJobGroupNames();
+                var groups = await _provider.GetJobGroupNames(schedulerName);
                 groups.ForEach(async(groupName, i)=> {
 
-                    var jobs = await _provider.GetJobKeys(groupName);
+                    var jobs = await _provider.GetJobKeys(schedulerName,groupName);
                     jobs.ForEach(async(jobKey,j) => {
-                        var job = await _provider.GetJobDetail(jobKey.Group, jobKey.Name);
-                        var triggers = await _provider.GetTriggersOfJob(jobKey.Group, jobKey.Name);
+                        var job = await _provider.GetJobDetail(schedulerName,jobKey.Group, jobKey.Name);
+                        var triggers = await _provider.GetTriggersOfJob(schedulerName,jobKey.Group, jobKey.Name);
                         var trigger = triggers.AsEnumerable().FirstOrDefault();
 
                         list.Add(new TaskOPT()
                         {
                             GroupName = jobKey.Group,
                             TaskName = jobKey.Name,
-                            Status = (await _provider.GetTriggerState(trigger.Key.Group, trigger.Key.Name)).GetHashCode(),
+                            Status = (await _provider.GetTriggerState(schedulerName,trigger.Key.Group, trigger.Key.Name)).GetHashCode(),
                             Describe = job.Description,
                             Interval = (trigger as CronTriggerImpl)?.CronExpressionString,
                             LastRunTime = trigger.GetPreviousFireTimeUtc()?.LocalDateTime,
                             ApiUrl = job.JobDataMap.GetString(HttpJobDetailKey.ApiUrl),
-                            RequestType = job.JobDataMap.GetString(HttpJobDetailKey.ApiMethod)
+                            RequestType = job.JobDataMap.GetString(HttpJobDetailKey.ApiMethod),
+                           SchedulerName=schedulerName,
                         });
 
                     });
@@ -264,12 +266,12 @@ namespace SchedulerCenter.Application.Services
         /// <param name="jobGroup"></param>
         /// <param name="jobName"></param>
         /// <returns></returns>
-        public async Task<ApiResult<bool>> RunJob(string jobGroup, string jobName)
+        public async Task<ApiResult<bool>> RunJob(string schedulerName,string jobGroup, string jobName)
         {
             try
             {
 
-                await _provider.TriggerJob(jobGroup, jobName);
+                await _provider.TriggerJob(schedulerName,jobGroup, jobName);
 
                 return ApiResult<bool>.OK(true, "任务执行成功");
             }
@@ -301,6 +303,17 @@ namespace SchedulerCenter.Application.Services
         }
 
 
+        public async Task<IEnumerable<SchedulerDTO>> GetAllSchedulers() {
+
+            var all = await _provider.GetAllSchedulers();
+            return all.Select(s=> new SchedulerDTO() { 
+                 SchedulerName=s.SchedulerName,
+            });
+
+
+        }
+
+
         public async Task<IEnumerable<TaskLogDTO>> GetJobLogPage(string taskName, string groupName, int page, int pageSize = 5) {
 
 
@@ -319,7 +332,7 @@ namespace SchedulerCenter.Application.Services
             });
         }
 
-
+   
 
     }
 }

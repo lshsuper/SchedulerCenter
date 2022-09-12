@@ -14,5 +14,6 @@ namespace SchedulerCenter.Infrastructure.QuartzNet.OPT
         public string Cron { get; set; }
         public string Descr { get; set; }
         public IDictionary<string, object> JobData { get; set; }
+        public  string SchedulerName { get; set; }
     }
 }

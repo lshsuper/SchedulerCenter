@@ -6,6 +6,8 @@ var $taskVue = new Vue({
             currentRow: [],
             rows: {}
         },
+        defaultScheduler:"",
+        schedulers:[],
         selectCom: {
             model: 'post',
             data: [{ value: 'post', label: 'post' }, { value: 'get', label: 'get' }, { value: 'put', label: 'put' }, { value: 'delete', label: 'delete' }]
@@ -26,6 +28,7 @@ var $taskVue = new Vue({
         footerHide: true,
         model: false,
         modelMessage: '任务管理',
+
         activedIndex: 0,
         taskValidate: {
             taskName: '', groupName: '', interval: '', apiUrl: '', authKey: '', authValue:
@@ -282,6 +285,17 @@ var $taskVue = new Vue({
                 $taskVue.log.index += $taskVue.log.index ? data.length : 1;
             });
         },
+        getSchedulers: function () {
+            this.ajax("/TaskBackGround/GetSchedulers", {}, function (res) {
+             
+                $taskVue.schedulers = res;
+                $taskVue.defaultScheduler = res[0].schedulerName;
+              
+                $taskVue.refresh(true);
+              
+                   
+            });
+        },
         getTaskValidate: function () {
         },
         add: function () {
@@ -315,9 +329,10 @@ var $taskVue = new Vue({
             //this.taskForm[0]
         },
         refresh: function (_init) {
+            
             this.select.currentRow = [];
             this.select.rows = {};
-            this.ajax("/TaskBackGround/GetJobs", {}, function (data) {
+            this.ajax("/TaskBackGround/GetJobs", { "schedulerName": $taskVue.defaultScheduler }, function (data) {
                 data.forEach(function (row) {
                     row.cellClassName = { operat: 'view-log' };
                 });
@@ -335,6 +350,8 @@ var $taskVue = new Vue({
                 if (!valid) {
                     return this.$Message.error('数据填写不完整!');
                 }
+
+                this.taskValidate["schedulerName"] = $taskVue.defaultScheduler;
                 this.ajax("/TaskBackGround/" + (this.isAdd ? 'add' : 'update'), this.taskValidate, function (data) {
                     $taskVue.$Message.success(data.msg || '保存成功');
                     if (data.status) {
@@ -371,7 +388,8 @@ var $taskVue = new Vue({
             });
         }
     }, created: function () {
-        this.refresh(true);
+        this.getSchedulers();
+        //this.refresh(true);
     }, mounted: function () {
         //$headerVue.activedIndex = 0;
     }

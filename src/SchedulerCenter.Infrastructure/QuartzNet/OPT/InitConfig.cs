@@ -11,7 +11,7 @@ namespace SchedulerCenter.Infrastructure.QuartzNet.OPT
         public string DbProviderName { get; set; }
         public string ConnectionString { get; set; }
       
-
+        public  string SchedulerName { get; set; }
     }
 
 }

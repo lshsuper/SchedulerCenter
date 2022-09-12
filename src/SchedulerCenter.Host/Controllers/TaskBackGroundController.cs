@@ -24,14 +24,27 @@ namespace SchedulerCenter.Host.Controllers
             return View("~/Views/TaskBackGround/Index.cshtml");
         }
 
+
         /// <summary>
         /// 获取所有的作业
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> GetJobs()
+        public async Task<IActionResult> GetSchedulers()
         {
-            return Json(await _jobService.GetJobs());
+            return Json(await _jobService.GetAllSchedulers());
         }
+
+
+        /// <summary>
+        /// 获取所有的作业
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> GetJobs(string schedulerName)
+        {
+            return Json(await _jobService.GetJobs(schedulerName));
+        }
+
+
         /// <summary>
         /// 获取作业运行日志
         /// </summary>
@@ -41,6 +54,7 @@ namespace SchedulerCenter.Host.Controllers
         /// <returns></returns>
         public async Task<IActionResult> GetRunLog(string taskName, string groupName, int page = 1)
         {
+           
             return Json(await _jobService.GetJobLogPage(taskName, groupName, page));
         }
         /// <summary>
@@ -56,7 +70,7 @@ namespace SchedulerCenter.Host.Controllers
         [TaskAuthor]
         public async Task<IActionResult> Remove(TaskOPT taskOptions)
         {
-            return Json(await _jobService.RemoveJob(taskOptions.TaskName,taskOptions.GroupName));
+            return Json(await _jobService.RemoveJob(taskOptions.SchedulerName, taskOptions.TaskName,taskOptions.GroupName));
         }
         [TaskAuthor]
         public async Task<IActionResult> Update(TaskOPT taskOptions)
@@ -66,17 +80,17 @@ namespace SchedulerCenter.Host.Controllers
         [TaskAuthor]
         public async Task<IActionResult> Pause(TaskOPT taskOptions)
         {
-            return Json(await _jobService.PauseJob(taskOptions.TaskName,taskOptions.GroupName));
+            return Json(await _jobService.PauseJob(taskOptions.SchedulerName,taskOptions.TaskName,taskOptions.GroupName));
         }
         [TaskAuthor]
         public async Task<IActionResult> Start(TaskOPT taskOptions)
         {
-            return Json(await _jobService.StartJob(taskOptions.TaskName,taskOptions.GroupName));
+            return Json(await _jobService.StartJob(taskOptions.SchedulerName,taskOptions.TaskName,taskOptions.GroupName));
         }
         [TaskAuthor]
         public async Task<IActionResult> Run(TaskOPT taskOptions)
         {
-            return Json(await _jobService.RunJob(taskOptions.GroupName,taskOptions.TaskName));
+            return Json(await _jobService.RunJob(taskOptions.SchedulerName,taskOptions.GroupName,taskOptions.TaskName));
         }
     }
 

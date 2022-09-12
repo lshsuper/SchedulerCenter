@@ -1,4 +1,19 @@
 
+CREATE TABLE `qrtz_job_details` (
+  `SCHED_NAME` varchar(120) NOT NULL COMMENT '调度器名称',
+  `JOB_NAME` varchar(200) NOT NULL COMMENT '任务名称',
+  `JOB_GROUP` varchar(200) NOT NULL COMMENT '任务分组',
+  `DESCRIPTION` varchar(250) DEFAULT NULL COMMENT '描述',
+  `JOB_CLASS_NAME` varchar(250) NOT NULL COMMENT '任务的类名，实现IJob的的类',
+  `IS_DURABLE` tinyint(1) NOT NULL COMMENT '是否持久化',
+  `IS_NONCONCURRENT` tinyint(1) NOT NULL COMMENT '是否不并发',
+  `IS_UPDATE_DATA` tinyint(1) NOT NULL COMMENT '是否更新',
+  `REQUESTS_RECOVERY` tinyint(1) NOT NULL COMMENT '是否请求恢复（当强制停止之后，是否保护现场，再次启动时，接着运行）',
+  `JOB_DATA` blob COMMENT 'job上携带的数据',
+  PRIMARY KEY (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`),
+  KEY `IDX_QRTZ_J_REQ_RECOVERY` (`SCHED_NAME`,`REQUESTS_RECOVERY`),
+  KEY `IDX_QRTZ_J_GRP` (`SCHED_NAME`,`JOB_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `qrtz_triggers` (
   `SCHED_NAME` varchar(120) NOT NULL,
   `TRIGGER_NAME` varchar(200) NOT NULL,
@@ -103,21 +118,7 @@ CREATE TABLE `qrtz_locks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE `qrtz_job_details` (
-  `SCHED_NAME` varchar(120) NOT NULL COMMENT '调度器名称',
-  `JOB_NAME` varchar(200) NOT NULL COMMENT '任务名称',
-  `JOB_GROUP` varchar(200) NOT NULL COMMENT '任务分组',
-  `DESCRIPTION` varchar(250) DEFAULT NULL COMMENT '描述',
-  `JOB_CLASS_NAME` varchar(250) NOT NULL COMMENT '任务的类名，实现IJob的的类',
-  `IS_DURABLE` tinyint(1) NOT NULL COMMENT '是否持久化',
-  `IS_NONCONCURRENT` tinyint(1) NOT NULL COMMENT '是否不并发',
-  `IS_UPDATE_DATA` tinyint(1) NOT NULL COMMENT '是否更新',
-  `REQUESTS_RECOVERY` tinyint(1) NOT NULL COMMENT '是否请求恢复（当强制停止之后，是否保护现场，再次启动时，接着运行）',
-  `JOB_DATA` blob COMMENT 'job上携带的数据',
-  PRIMARY KEY (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`),
-  KEY `IDX_QRTZ_J_REQ_RECOVERY` (`SCHED_NAME`,`REQUESTS_RECOVERY`),
-  KEY `IDX_QRTZ_J_GRP` (`SCHED_NAME`,`JOB_GROUP`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 CREATE TABLE `qrtz_fired_triggers` (

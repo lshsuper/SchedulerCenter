@@ -1,19 +1,19 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
     Layout = null;
 }
 <html lang="en">
 <head>
-    <title>定时任务UI</title>
+    <title>@ViewData["Title"]</title>
     @*<link href="~/iView/iview.css" rel="stylesheet" />*@
     <link href="~/iView/styles/iview.css" rel="stylesheet" />
     @*<link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">*@
-    <link href="~/element-ui/index.css" rel="stylesheet" />
+    @*<link href="~/element-ui/index.css" rel="stylesheet" />*@
     <link href="~/css/task_index.css?v=2.0" rel="stylesheet" />
     <script src="~/vue/vue.js?v=2.0"></script>
-    <script src="~/element-ui/index.js"></script>
+    @*<script src="~/element-ui/index.js"></script>*@
     <script src="~/vue/axios.min.js"></script>
     <script src="~/iView/iview.min.js"></script>
+    <script src="~/js/utils.js"></script>
     <style>
         [v-cloak] {
             display: none;
@@ -37,13 +37,27 @@
 </body>
 </html>
 <script>
+
+    var title = "@Html.Raw(ViewData["Title"])";
     var $headerVue = new Vue({
         el: "#header-container",
         data: {
             activedIndex: -1,
-            links: [{ text: '后台任务', url: '/' }, { text: '数据看板', url: '/DataBoard/Index' },  { text: '安全退出', url: '/Home/SignOut' }]
+            links: [{ text: '后台任务', url: '/' }, { text: '数据看板', url: '/DataBoard/Index' }, { text: '系统设置', url: '/Setting/Index' },{ text: '安全退出', url: '/Home/SignOut' }]
         }, methods: {
         }, created: function () {
+
+            for (let i = 0; i < this.links.length; i++) {
+
+                let curH = this.links[i];
+                if (curH.text == title) {
+                    this.activedIndex = i;
+                    break;
+                }
+
+            }
+            
+
         }
     });
 </script>
