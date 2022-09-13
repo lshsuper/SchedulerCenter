@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using SchedulerCenter.Application.Services;
 using SchedulerCenter.Core.Common;
 using SchedulerCenter.Host.Attributes;
 using System;
@@ -24,15 +25,16 @@ namespace SchedulerCenter.Host.Controllers
    [Route("api/[controller]/[action]"), ApiController, Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class OpenApiController : ControllerBase
     {
-
-
+        private readonly JobService _jobService;
+      
         private readonly IConfiguration _configuration;
         /// <summary>
-        /// 开发API-构造器
+        /// 开放API-构造器
         /// </summary>
         /// <param name="configuration"></param>
-        public OpenApiController(IConfiguration configuration) {
+        public OpenApiController(IConfiguration configuration, JobService jobService) {
             _configuration = configuration;
+            _jobService = jobService;
         }
 
         #region +Open-API-Common
@@ -42,11 +44,16 @@ namespace SchedulerCenter.Host.Controllers
         /// <param name="ticket">票据码</param>
         /// <returns></returns>
         [SwaggerApiGroup(SwaggerApiGroupName.Common), HttpGet, AllowAnonymous]
-        public string AuthToken(string ticket)
+        public ApiResult<string> Authorization(string ticket)
         {
+         
+            if(string.IsNullOrEmpty(ticket))return ApiResult<string>.Error("[ticket]不能为空");
 
-            var jwtConfig = _configuration.GetSection("Jwt").Get<JWTConfig>();
+            string _token = _configuration["token"];
+            string superToken = _configuration["superToken"];
+            if (_token != ticket && superToken != ticket) return ApiResult<string>.Error("[ticket]不合法");
 
+            var jwtConfig = _configuration.GetSection("JwtConfig").Get<JWTConfig>();
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim("Ticket", ticket));
             var creds = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Secret)), SecurityAlgorithms.HmacSha256);
@@ -58,8 +65,8 @@ namespace SchedulerCenter.Host.Controllers
                 signingCredentials: creds
                 );
             var t = new JwtSecurityTokenHandler().WriteToken(token);
+            return  ApiResult<string>.OK(t);
 
-            return t;
         }
         #endregion
 

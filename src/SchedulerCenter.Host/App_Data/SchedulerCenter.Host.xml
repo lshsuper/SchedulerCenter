@@ -33,13 +33,13 @@
             对外API
             </summary>
         </member>
-        <member name="M:SchedulerCenter.Host.Controllers.OpenApiController.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+        <member name="M:SchedulerCenter.Host.Controllers.OpenApiController.#ctor(Microsoft.Extensions.Configuration.IConfiguration,SchedulerCenter.Application.Services.JobService)">
             <summary>
-            开发API-构造器
+            开放API-构造器
             </summary>
             <param name="configuration"></param>
         </member>
-        <member name="M:SchedulerCenter.Host.Controllers.OpenApiController.AuthToken(System.String)">
+        <member name="M:SchedulerCenter.Host.Controllers.OpenApiController.Authorization(System.String)">
              <summary>
             获取SC-TOKEN
              </summary>
@@ -49,12 +49,6 @@
         <member name="M:SchedulerCenter.Host.Controllers.OpenApiController.Test">
             <summary>
             测试
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:SchedulerCenter.Host.Controllers.TaskBackGroundController.GetSchedulers">
-            <summary>
-            获取所有的作业
             </summary>
             <returns></returns>
         </member>

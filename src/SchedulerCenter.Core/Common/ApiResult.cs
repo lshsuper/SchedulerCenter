@@ -33,7 +33,7 @@ namespace SchedulerCenter.Core.Common
             };
         }
 
-        public static ApiResult<T> Error(string msg)
+        public static ApiResult<T> Error(string msg ,T data=default(T))
         {
             return new ApiResult<T>()
             {

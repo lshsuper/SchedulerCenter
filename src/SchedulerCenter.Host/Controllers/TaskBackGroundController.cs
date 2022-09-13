@@ -14,9 +14,11 @@ namespace SchedulerCenter.Host.Controllers
       
       
         private readonly JobService _jobService;
-        public TaskBackGroundController(JobService jobService)
+        private readonly SettingService _settingService;
+        public TaskBackGroundController(JobService jobService, SettingService settingService)
         {
             _jobService = jobService;
+            _settingService =settingService;
         }
 
         public IActionResult Index()
@@ -25,14 +27,7 @@ namespace SchedulerCenter.Host.Controllers
         }
 
 
-        /// <summary>
-        /// 获取所有的作业
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IActionResult> GetSchedulers()
-        {
-            return Json(await _jobService.GetAllSchedulers());
-        }
+  
 
 
         /// <summary>

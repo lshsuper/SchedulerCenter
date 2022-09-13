@@ -2,7 +2,14 @@
     ViewData["Title"] = "后台任务";
     Layout = "~/Views/Shared/Vue.cshtml";
 }
-
+<style>
+    .content {
+        word-break: break-all;
+        white-space: normal;
+        overflow:hidden;
+        height:300px;
+    }
+</style>
 <div id="task-container" v-cloak>
     <Modal v-model="log.model"
            v-bind:title="log.title"
@@ -55,8 +62,8 @@
                 <span class="ivu-icon ivu-icon-ios-cube"> </span>
                 <span> 后台任务列表</span>
             </div>
-            <i-select v-model="defaultScheduler" style="width:200px">
-                <i-option v-for="item in schedulers" :value="item.schedulerName" :key="item.schedulerName">{{ item.schedulerName }}</i-option>
+            <i-select v-model="defaultNode" style="width:200px">
+                <i-option v-for="item in nodes" :value="item.schedName" :key="item.schedName">{{ item.schedName }}</i-option>
             </i-select>
             <i-button type="info" icon="md-add" @@click="add">新建任务</i-button>
             <i-button type="success" @@click="tiggerAction('pause')" icon="ios-power">暂停任务</i-button>

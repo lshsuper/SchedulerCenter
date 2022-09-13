@@ -6,8 +6,8 @@ var $taskVue = new Vue({
             currentRow: [],
             rows: {}
         },
-        defaultScheduler:"",
-        schedulers:[],
+        defaultNode:"",
+        nodes:[],
         selectCom: {
             model: 'post',
             data: [{ value: 'post', label: 'post' }, { value: 'get', label: 'get' }, { value: 'put', label: 'put' }, { value: 'delete', label: 'delete' }]
@@ -266,7 +266,7 @@ var $taskVue = new Vue({
             $taskVue.ajax("/TaskBackGround/GetRunLog", {
                 taskName: $taskVue.log.title, groupName: $taskVue.log.groupName, page: $taskVue.log.page
             }, function (data) {
-                if (data.length === 0) {
+                if (data.data.length === 0) {
                     if ($taskVue.log.page >= 1) {
                         $taskVue.log.page--;
                     }
@@ -277,19 +277,19 @@ var $taskVue = new Vue({
                 }
                 //  $taskVue.log.spin = false;
                 if (next) {
-                    $taskVue.log.data = data;
+                    $taskVue.log.data = data.data;
                     // $taskVue.log.data.push(...data);
                 } else {
-                    $taskVue.log.data = data;
+                    $taskVue.log.data = data.data;
                 }
-                $taskVue.log.index += $taskVue.log.index ? data.length : 1;
+                $taskVue.log.index += $taskVue.log.index ? data.data.length : 1;
             });
         },
-        getSchedulers: function () {
-            this.ajax("/TaskBackGround/GetSchedulers", {}, function (res) {
+        getNodes: function () {
+            this.ajax("/Setting/GetNodes", {}, function (res) {
              
-                $taskVue.schedulers = res;
-                $taskVue.defaultScheduler = res[0].schedulerName;
+                $taskVue.nodes = res;
+                $taskVue.defaultNode = res[0].schedName;
               
                 $taskVue.refresh(true);
               
@@ -332,11 +332,11 @@ var $taskVue = new Vue({
             
             this.select.currentRow = [];
             this.select.rows = {};
-            this.ajax("/TaskBackGround/GetJobs", { "schedulerName": $taskVue.defaultScheduler }, function (data) {
-                data.forEach(function (row) {
+            this.ajax("/TaskBackGround/GetJobs", { "schedulerName": $taskVue.defaultNode }, function (data) {
+                data.data.forEach(function (row) {
                     row.cellClassName = { operat: 'view-log' };
                 });
-                $taskVue.rows = data;
+                $taskVue.rows = data.data;
                 if (!_init) {
                     return $taskVue.$Message.success('刷新成功!');
                 }
@@ -351,7 +351,7 @@ var $taskVue = new Vue({
                     return this.$Message.error('数据填写不完整!');
                 }
 
-                this.taskValidate["schedulerName"] = $taskVue.defaultScheduler;
+                this.taskValidate["schedulerName"] = $taskVue.defaultNode;
                 this.ajax("/TaskBackGround/" + (this.isAdd ? 'add' : 'update'), this.taskValidate, function (data) {
                     $taskVue.$Message.success(data.msg || '保存成功');
                     if (data.status) {
@@ -388,7 +388,7 @@ var $taskVue = new Vue({
             });
         }
     }, created: function () {
-        this.getSchedulers();
+        this.getNodes();
         //this.refresh(true);
     }, mounted: function () {
         //$headerVue.activedIndex = 0;

@@ -18,6 +18,9 @@ namespace SchedulerCenter.Host.Attributes
     /// </summary>
     public enum SwaggerApiGroupName
     {
+
+        //[SwaggerGroupInfo(Title = "All", Description = "Open-API开放接口", Version = "v1")]
+        //All,
         [SwaggerGroupInfo(Title = "Common", Description = "公共接口", Version = "v1")]
         Common,
         [SwaggerGroupInfo(Title = "Job", Description = "任务相关分组", Version = "v1")]

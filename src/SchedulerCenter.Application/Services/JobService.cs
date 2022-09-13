@@ -41,7 +41,8 @@ namespace SchedulerCenter.Application.Services
 
             try
             {
-
+                if (string.IsNullOrEmpty(opt.AuthKey)) opt.AuthKey = string.Empty;
+                if (string.IsNullOrEmpty(opt.AuthValue)) opt.AuthValue = string.Empty;
                 var res =await _provider.AddCronJob<HttpJob>( new AddCronJobOPT {
                 
                     TriggerGroup=opt.GroupName,
@@ -57,7 +58,7 @@ namespace SchedulerCenter.Application.Services
                        [HttpJobDetailKey.ApiAuthKey] =opt.AuthKey,
                        [HttpJobDetailKey.ApiAuthValue] = opt.AuthValue,
 
-                    }
+                    },SchedulerName=opt.SchedulerName
 
                 });
 
@@ -130,11 +131,14 @@ namespace SchedulerCenter.Application.Services
                 await _provider.PauseTrigger(opt.SchedulerName,opt.TaskName, opt.GroupName);
                 await _provider.UnscheduleJob(opt.SchedulerName,opt.TaskName, opt.GroupName);// 移除触发器
                 await _provider.DeleteJob(opt.SchedulerName,opt.TaskName, opt.GroupName);
-                
+
+
+                if (string.IsNullOrEmpty(opt.AuthKey)) opt.AuthKey = string.Empty;
+                if (string.IsNullOrEmpty(opt.AuthValue)) opt.AuthValue = string.Empty;
                 //2.新构建
                 var res = await _provider.AddCronJob<HttpJob>(new AddCronJobOPT
                 {
-
+                    SchedulerName=opt.SchedulerName,
                     TriggerGroup = opt.GroupName,
                     TriggerName = opt.TaskName,
                     JobName = opt.TaskName,
@@ -218,7 +222,7 @@ namespace SchedulerCenter.Application.Services
         /// 获取任务列表
         /// </summary>
         /// <returns></returns>
-        public  async Task<List<TaskOPT>> GetJobs(string schedulerName)
+        public  async Task<ApiResult<List<TaskOPT>>> GetJobs(string schedulerName)
         {
            
             try
@@ -249,7 +253,7 @@ namespace SchedulerCenter.Application.Services
                     });
 
                 });
-                return list;
+                return ApiResult<List<TaskOPT>>.OK(list);
               
             }
             catch (Exception ex)
@@ -257,7 +261,7 @@ namespace SchedulerCenter.Application.Services
                 //FileQuartz.WriteStartLog("获取作业异常：" + ex.Message + ex.StackTrace);
                
             }
-            return new List<TaskOPT>();
+            return ApiResult<List<TaskOPT>>.Error("回去任务列表失败",new List<TaskOPT>());
         }
 
         /// <summary>
@@ -314,7 +318,7 @@ namespace SchedulerCenter.Application.Services
         }
 
 
-        public async Task<IEnumerable<TaskLogDTO>> GetJobLogPage(string taskName, string groupName, int page, int pageSize = 5) {
+        public async Task<ApiResult<IEnumerable<TaskLogDTO>>> GetJobLogPage(string taskName, string groupName, int page, int pageSize = 5) {
 
 
             int offset = (page - 1) * pageSize;
@@ -324,12 +328,12 @@ namespace SchedulerCenter.Application.Services
 
            var data = await _dapperProvider.QueryAsync<LogModel>(dataSql, new { job_name = taskName, job_group = groupName, offset=offset, limit=pageSize });
 
-            return data.Select((s) => new TaskLogDTO
+            return ApiResult< IEnumerable < TaskLogDTO >>.OK(data.Select((s) => new TaskLogDTO
             {
                  Msg=s.Content,
                  BeginDate=s.StartTime.ToString("yyyy-MM-dd HH:mm:ss:ms"),
                  EndDate=s.EndTime.ToString("yyyy-MM-dd HH:mm:ss:ms"),
-            });
+            }));
         }
 
    

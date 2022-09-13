@@ -62,9 +62,12 @@ namespace SchedulerCenter.Host.Controllers
                 {
                     ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60)
                 });
+                return new RedirectResult("/TaskBackGround/index");
             }
-           
-            return new RedirectResult("/TaskBackGround/index");
+            ViewBag.msg = "授权失败";
+            return View("~/Views/Home/Index.cshtml");
+
+
         }
 
         /// <summary>

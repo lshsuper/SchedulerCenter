@@ -3,12 +3,16 @@
     Layout = null;
 }
 <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<link href="~/iView/iview.css" rel="stylesheet" />
-@*<link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">*@
+
 <link href="~/css/login_index.css" rel="stylesheet" />
 <title>调度中心</title>
-<script src="~/vue/vue.js"></script>
+
+<link href="~/iView/styles/iview.css" rel="stylesheet" />
+<link href="~/css/task_index.css?v=2.0" rel="stylesheet" />
+<script src="~/vue/vue.js?v=2.0"></script>
+<script src="~/vue/axios.min.js"></script>
 <script src="~/iView/iview.min.js"></script>
+<script src="~/js/utils.js"></script>
 
 <div id="index-container">
     <form ref="$form" action="/home/validateAuthor" method="post">
@@ -21,7 +25,7 @@
                 </col>
             </row>
         </div>
-        <div>   <i-input name="token" size="large"  v-model="token" placeholder="输入口令" /></div>
+        <div>   <i-input name="token" size="large" v-model="token" placeholder="输入口令" /></div>
         <div>  <i-button type="error" size="large" v-on:click="submit" long>提交</i-button></div>
     </form>
 </div>

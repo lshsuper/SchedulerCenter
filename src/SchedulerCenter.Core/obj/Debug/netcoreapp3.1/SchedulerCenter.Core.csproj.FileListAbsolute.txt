@@ -18,3 +18,13 @@ E:\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCen
 E:\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.pdb
 E:\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.csproj.AssemblyReference.cache
 E:\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\projects\调度配置\Code\SchedulerCenter\src\SchedulerCenter.Core\bin\Debug\netcoreapp3.1\SchedulerCenter.Core.deps.json
+D:\projects\调度配置\Code\SchedulerCenter\src\SchedulerCenter.Core\bin\Debug\netcoreapp3.1\SchedulerCenter.Core.dll
+D:\projects\调度配置\Code\SchedulerCenter\src\SchedulerCenter.Core\bin\Debug\netcoreapp3.1\SchedulerCenter.Core.pdb
+D:\projects\调度配置\Code\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\projects\调度配置\Code\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.AssemblyInfoInputs.cache
+D:\projects\调度配置\Code\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.AssemblyInfo.cs
+D:\projects\调度配置\Code\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.csproj.CoreCompileInputs.cache
+D:\projects\调度配置\Code\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.dll
+D:\projects\调度配置\Code\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.pdb
+D:\projects\调度配置\Code\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.csproj.AssemblyReference.cache

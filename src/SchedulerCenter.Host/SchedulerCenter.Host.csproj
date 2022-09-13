@@ -17,7 +17,8 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>E:\SchedulerCenter\src\SchedulerCenter.Host\SchedulerCenter.Host.xml</DocumentationFile>
+    <DocumentationFile>App_Data\SchedulerCenter.Host.xml</DocumentationFile>
+    <OutputPath>App_Data\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,13 +26,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="SchedulerCenter.Host.xml">
+    <Content Include="App_Data\SchedulerCenter.Host.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="IGeekFan.AspNetCore.Knife4jUI" Version="0.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.0" />
