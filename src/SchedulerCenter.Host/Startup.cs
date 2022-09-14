@@ -60,7 +60,6 @@ namespace SchedulerCenter.Host
             {
                 options.Cookie.HttpOnly = true;
                 options.LoginPath = new PathString("/Home/Index");
-
                 options.ClaimsIssuer = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromSeconds(60);
@@ -197,9 +196,12 @@ namespace SchedulerCenter.Host
                 //        new string[] { }
                 //    }
                 //});
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
+                var apiXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var apiXmlPath = Path.Combine(AppContext.BaseDirectory, apiXmlFile);
+                var coreXmlFile = $"{Assembly.Load("SchedulerCenter.Core").GetName().Name}.xml";
+                var coreXmlPath = Path.Combine(AppContext.BaseDirectory, coreXmlFile);
+                c.IncludeXmlComments(apiXmlPath);
+                c.IncludeXmlComments(coreXmlPath);
 
 
             });
