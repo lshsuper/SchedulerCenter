@@ -222,7 +222,7 @@ namespace SchedulerCenter.Application.Services
         /// 获取任务列表
         /// </summary>
         /// <returns></returns>
-        public  async Task<ApiResult<List<TaskOPT>>> GetJobs(string schedulerName)
+        public  async Task<ApiResult<IEnumerable<TaskOPT>>> GetJobs(string schedulerName)
         {
            
             try
@@ -253,7 +253,7 @@ namespace SchedulerCenter.Application.Services
                     });
 
                 });
-                return ApiResult<List<TaskOPT>>.OK(list);
+                return ApiResult<IEnumerable<TaskOPT>>.OK(list);
               
             }
             catch (Exception ex)
@@ -261,7 +261,7 @@ namespace SchedulerCenter.Application.Services
                 //FileQuartz.WriteStartLog("获取作业异常：" + ex.Message + ex.StackTrace);
                
             }
-            return ApiResult<List<TaskOPT>>.Error("回去任务列表失败",new List<TaskOPT>());
+            return ApiResult<IEnumerable<TaskOPT>>.Error("回去任务列表失败",new List<TaskOPT>());
         }
 
         /// <summary>

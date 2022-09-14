@@ -25,6 +25,13 @@ namespace SchedulerCenter.Host.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
+
+            var curUser=HttpContext.User;
+            if (curUser != null && curUser.Identity.IsAuthenticated) {
+
+                return Redirect("/TaskBackGround/Index");
+
+            }
             if (!string.IsNullOrEmpty(HttpContext.Request("ReturnUrl")))
             {
                 return new ContentResult
