@@ -391,7 +391,7 @@ var $taskVue = new Vue({
                 if (error.response.status === 401) {
                     return window.location.href = '/home/index';
                 }
-                $taskVue.$Message.success('出错啦!');
+                $taskVue.$Message.error('出错啦!');
                 console.log(error);
                 fun(null);
             });
