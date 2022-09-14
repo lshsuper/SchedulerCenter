@@ -1,0 +1,233 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SchedulerCenter.Core</name>
+    </assembly>
+    <members>
+        <member name="P:SchedulerCenter.Core.Common.JWTConfig.Secret">
+            <summary>
+            密钥 长度不少于16位
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Common.JWTConfig.Issuer">
+            <summary>
+            发行人
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Common.JWTConfig.Audience">
+            <summary>
+            观众
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Common.JWTConfig.Expire">
+            <summary>
+            访问过期
+            </summary>
+        </member>
+        <member name="T:SchedulerCenter.Core.Constant.HttpJobDetailKey">
+            <summary>
+            HttpJobDetailKey 任务扩展map
+            </summary>
+        </member>
+        <member name="F:SchedulerCenter.Core.Constant.HttpJobDetailKey.ApiUrl">
+            <summary>
+            http请求地址
+            </summary>
+        </member>
+        <member name="F:SchedulerCenter.Core.Constant.HttpJobDetailKey.ApiMethod">
+            <summary>
+            http请求方式
+            </summary>
+        </member>
+        <member name="F:SchedulerCenter.Core.Constant.HttpJobDetailKey.ApiAuthKey">
+            <summary>
+            http-header-key
+            </summary>
+        </member>
+        <member name="F:SchedulerCenter.Core.Constant.HttpJobDetailKey.ApiAuthValue">
+            <summary>
+            http-header-value
+            </summary>
+        </member>
+        <member name="T:SchedulerCenter.Core.Request.AddJobRequest">
+            <summary>
+            请求体-创建任务
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.AddJobRequest.TaskName">
+            <summary>
+            任务名称
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.AddJobRequest.GroupName">
+            <summary>
+            任务分组
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.AddJobRequest.Interval">
+            <summary>
+            CRON表达式
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.AddJobRequest.ApiUrl">
+            <summary>
+            Api请求地址
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.AddJobRequest.AuthKey">
+            <summary>
+            授权Key
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.AddJobRequest.AuthValue">
+            <summary>
+            授权Value
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.AddJobRequest.Describe">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.AddJobRequest.RequestType">
+            <summary>
+            请求类型
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.AddJobRequest.SchedulerName">
+            <summary>
+            调取器名称
+            </summary>
+        </member>
+        <member name="T:SchedulerCenter.Core.Request.PauseJobRequest">
+            <summary>
+            请求体-暂停任务
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.PauseJobRequest.SchedulerName">
+            <summary>
+            调度器名称
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.PauseJobRequest.TaskName">
+            <summary>
+            任务名
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.PauseJobRequest.GroupName">
+            <summary>
+            分组名
+            </summary>
+        </member>
+        <member name="T:SchedulerCenter.Core.Request.RemoveJobRequest">
+            <summary>
+            请求体-移除任务
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.RemoveJobRequest.SchedulerName">
+            <summary>
+            调度器名称
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.RemoveJobRequest.TaskName">
+            <summary>
+            任务名
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.RemoveJobRequest.GroupName">
+            <summary>
+            分组名
+            </summary>
+        </member>
+        <member name="T:SchedulerCenter.Core.Request.RunJobRequest">
+            <summary>
+            请求体-运行任务
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.RunJobRequest.SchedulerName">
+            <summary>
+            调度器名称
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.RunJobRequest.TaskName">
+            <summary>
+            任务名
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.RunJobRequest.GroupName">
+            <summary>
+            分组名
+            </summary>
+        </member>
+        <member name="T:SchedulerCenter.Core.Request.StartJobRequest">
+            <summary>
+            请求体-开始任务
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.StartJobRequest.SchedulerName">
+            <summary>
+            调度器名称
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.StartJobRequest.TaskName">
+            <summary>
+            任务名
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.StartJobRequest.GroupName">
+            <summary>
+            分组名
+            </summary>
+        </member>
+        <member name="T:SchedulerCenter.Core.Request.UpdateJobRequest">
+            <summary>
+            请求体-编辑任务
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.UpdateJobRequest.TaskName">
+            <summary>
+            任务名称
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.UpdateJobRequest.GroupName">
+            <summary>
+            任务分组
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.UpdateJobRequest.Interval">
+            <summary>
+            CRON表达式
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.UpdateJobRequest.ApiUrl">
+            <summary>
+            Api请求地址
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.UpdateJobRequest.AuthKey">
+            <summary>
+            授权Key
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.UpdateJobRequest.AuthValue">
+            <summary>
+            授权Value
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.UpdateJobRequest.Describe">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.UpdateJobRequest.RequestType">
+            <summary>
+            请求类型
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.UpdateJobRequest.SchedulerName">
+            <summary>
+            调取器名称
+            </summary>
+        </member>
+    </members>
+</doc>
