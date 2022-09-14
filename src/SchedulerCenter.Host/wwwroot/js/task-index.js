@@ -218,6 +218,10 @@ var $taskVue = new Vue({
         ],
         rows: []
     }, methods: {
+
+        changeNode: function (value) {
+            this.refresh(true);
+        },
         onChange(item, value) {
             if (item.onChange && typeof item.onChange == "function") {
                 item.onChange(value, item);
@@ -333,6 +337,10 @@ var $taskVue = new Vue({
             this.select.currentRow = [];
             this.select.rows = {};
             this.ajax("/TaskBackGround/GetJobs", { "schedulerName": $taskVue.defaultNode }, function (data) {
+                if (data == null || data.length<=0) {
+                    $taskVue.rows = [];
+                    return
+                }
                 data.data.forEach(function (row) {
                     row.cellClassName = { operat: 'view-log' };
                 });
@@ -385,6 +393,7 @@ var $taskVue = new Vue({
                 }
                 $taskVue.$Message.success('出错啦!');
                 console.log(error);
+                fun(null);
             });
         }
     }, created: function () {

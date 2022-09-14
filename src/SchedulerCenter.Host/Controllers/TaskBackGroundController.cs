@@ -18,7 +18,7 @@ namespace SchedulerCenter.Host.Controllers
 
         private readonly JobServiceFactory _jobServiceFactory;
         private readonly SettingService _settingService;
-        public TaskBackGroundController(Func<Type, IJobService> func, SettingService settingService, JobServiceFactory jobServiceFactory)
+        public TaskBackGroundController(SettingService settingService, JobServiceFactory jobServiceFactory)
         {
            
             _settingService =settingService;
