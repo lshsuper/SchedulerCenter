@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SchedulerCenter.Host.Options
+namespace SchedulerCenter.Core.Option
 {
     public class LoggerOPT
     {

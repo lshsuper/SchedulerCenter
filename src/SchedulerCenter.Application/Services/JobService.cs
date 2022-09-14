@@ -4,7 +4,6 @@ using SchedulerCenter.Core.Common;
 using SchedulerCenter.Core.Model;
 using SchedulerCenter.Core.Option;
 using SchedulerCenter.Host.Models;
-using SchedulerCenter.Host.Options;
 using SchedulerCenter.Infrastructure.Dapper;
 using SchedulerCenter.Infrastructure.QuartzNet;
 using SchedulerCenter.Infrastructure.QuartzNet.OPT;
@@ -15,10 +14,11 @@ using System.Threading.Tasks;
 using SchedulerCenter.Core.Constant;
 using SchedulerCenter.Infrastructure.Extensions;
 using SchedulerCenter.Core.DTO;
+using SchedulerCenter.Core.Interface;
 
 namespace SchedulerCenter.Application.Services
 {
-    public class JobService
+    public class JobService: IJobService
     {
 
         private QuartzProvider _provider;
@@ -336,7 +336,11 @@ namespace SchedulerCenter.Application.Services
             }));
         }
 
-   
-
+      
+        Task<IJobService> IJobService.Init(string schedName)
+        {
+          
+            return Task.FromResult<IJobService>(this);
+        }
     }
 }

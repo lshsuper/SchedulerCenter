@@ -9,4 +9,6 @@ src/SchedulerCenter.Application/obj
 
 src/SchedulerCenter.Infrastructure/bin
 src/SchedulerCenter.Infrastructure/obj
-src/SchedulerCenter.Host/DoxXml/*.dll
+
+src/SchedulerCenter.Core/bin
+src/SchedulerCenter.Core/obj

@@ -5,20 +5,24 @@ using Quartz.Spi;
 using System.Threading.Tasks;
 using SchedulerCenter.Core.Option;
 using SchedulerCenter.Application.Services;
+using SchedulerCenter.Core.Interface;
+using System;
+using SchedulerCenter.Application.factory;
 
 namespace SchedulerCenter.Host.Controllers
 {
 
     public class TaskBackGroundController : Controller
     {
-      
-      
-        private readonly JobService _jobService;
+
+
+        private readonly JobServiceFactory _jobServiceFactory;
         private readonly SettingService _settingService;
-        public TaskBackGroundController(JobService jobService, SettingService settingService)
+        public TaskBackGroundController(Func<Type, IJobService> func, SettingService settingService, JobServiceFactory jobServiceFactory)
         {
-            _jobService = jobService;
+           
             _settingService =settingService;
+            _jobServiceFactory =jobServiceFactory;
         }
 
         public IActionResult Index()
@@ -27,6 +31,8 @@ namespace SchedulerCenter.Host.Controllers
         }
 
 
+     
+      
   
 
 
@@ -36,7 +42,8 @@ namespace SchedulerCenter.Host.Controllers
         /// <returns></returns>
         public async Task<IActionResult> GetJobs(string schedulerName)
         {
-            return Json(await _jobService.GetJobs(schedulerName));
+            var service =await _jobServiceFactory.GetService(schedulerName);
+            return Json(await service.GetJobs(schedulerName));
         }
 
 
@@ -47,10 +54,10 @@ namespace SchedulerCenter.Host.Controllers
         /// <param name="groupName"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        public async Task<IActionResult> GetRunLog(string taskName, string groupName, int page = 1)
+        public async Task<IActionResult> GetRunLog(string schedulerName,string taskName, string groupName, int page = 1)
         {
-           
-            return Json(await _jobService.GetJobLogPage(taskName, groupName, page));
+            var service = await _jobServiceFactory.GetService(schedulerName);
+            return Json(await service.GetJobLogPage(taskName, groupName, page));
         }
         /// <summary>
         /// 添加任务
@@ -60,32 +67,38 @@ namespace SchedulerCenter.Host.Controllers
         [TaskAuthor]
         public async Task<IActionResult> Add(TaskOPT taskOptions)
         {
-            return Json(await _jobService.AddJob(taskOptions));
+            var service = await _jobServiceFactory.GetService(taskOptions.SchedulerName);
+            return Json(await service.AddJob(taskOptions));
         }
         [TaskAuthor]
         public async Task<IActionResult> Remove(TaskOPT taskOptions)
         {
-            return Json(await _jobService.RemoveJob(taskOptions.SchedulerName, taskOptions.TaskName,taskOptions.GroupName));
+            var service = await _jobServiceFactory.GetService(taskOptions.SchedulerName);
+            return Json(await service.RemoveJob(taskOptions.SchedulerName, taskOptions.TaskName,taskOptions.GroupName));
         }
         [TaskAuthor]
         public async Task<IActionResult> Update(TaskOPT taskOptions)
         {
-            return Json(await _jobService.UpdateJob(taskOptions));
+            var service = await _jobServiceFactory.GetService(taskOptions.SchedulerName);
+            return Json(await service.UpdateJob(taskOptions));
         }
         [TaskAuthor]
         public async Task<IActionResult> Pause(TaskOPT taskOptions)
         {
-            return Json(await _jobService.PauseJob(taskOptions.SchedulerName,taskOptions.TaskName,taskOptions.GroupName));
+            var service = await _jobServiceFactory.GetService(taskOptions.SchedulerName);
+            return Json(await service.PauseJob(taskOptions.SchedulerName,taskOptions.TaskName,taskOptions.GroupName));
         }
         [TaskAuthor]
         public async Task<IActionResult> Start(TaskOPT taskOptions)
         {
-            return Json(await _jobService.StartJob(taskOptions.SchedulerName,taskOptions.TaskName,taskOptions.GroupName));
+            var service = await _jobServiceFactory.GetService(taskOptions.SchedulerName);
+            return Json(await service.StartJob(taskOptions.SchedulerName,taskOptions.TaskName,taskOptions.GroupName));
         }
         [TaskAuthor]
         public async Task<IActionResult> Run(TaskOPT taskOptions)
         {
-            return Json(await _jobService.RunJob(taskOptions.SchedulerName,taskOptions.GroupName,taskOptions.TaskName));
+            var service = await _jobServiceFactory.GetService(taskOptions.SchedulerName);
+            return Json(await service.RunJob(taskOptions.SchedulerName,taskOptions.GroupName,taskOptions.TaskName));
         }
     }
 

@@ -49,6 +49,51 @@
             http-header-value
             </summary>
         </member>
+        <member name="M:SchedulerCenter.Core.Interface.IJobService.RemoveJob(System.String,System.String,System.String)">
+            <summary>
+            RemoveJob 移除任务
+            </summary>
+            <param name="jobName"></param>
+            <param name="jobGroup"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SchedulerCenter.Core.Interface.IJobService.UpdateJob(SchedulerCenter.Core.Option.TaskOPT)">
+            <summary>
+            更新任务
+            </summary>
+            <param name="opt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SchedulerCenter.Core.Interface.IJobService.StartJob(System.String,System.String,System.String)">
+            <summary>
+            开始任务
+            </summary>
+            <param name="triggerName"></param>
+            <param name="triggerGroup"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SchedulerCenter.Core.Interface.IJobService.PauseJob(System.String,System.String,System.String)">
+            <summary>
+            暂停任务
+            </summary>
+            <param name="triggerName"></param>
+            <param name="triggerGroup"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SchedulerCenter.Core.Interface.IJobService.GetJobs(System.String)">
+            <summary>
+            获取任务列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SchedulerCenter.Core.Interface.IJobService.RunJob(System.String,System.String,System.String)">
+            <summary>
+            运行任务
+            </summary>
+            <param name="jobGroup"></param>
+            <param name="jobName"></param>
+            <returns></returns>
+        </member>
         <member name="T:SchedulerCenter.Core.Request.AddJobRequest">
             <summary>
             请求体-创建任务

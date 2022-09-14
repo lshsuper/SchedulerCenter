@@ -58,7 +58,17 @@ namespace SchedulerCenter.Application.Services
             }))>0;
 
         }
+        /// <summary>
+        /// 获取节点
+        /// </summary>
+        /// <returns></returns>
+        public async Task<NodeDTO> GetNode(string schedName)
+        {
 
+            return await _dapperProvider.QueryFirstOrDefaultAsync<NodeDTO>("select  sched_name as 'SchedName',ID,Addr  from qrtz_nodes where sched_name=@sched_name",new {
+                sched_name=schedName,
+            });
+        }
 
 
     }

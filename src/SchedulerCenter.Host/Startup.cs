@@ -29,6 +29,8 @@ using SchedulerCenter.Core.Common;
 using SchedulerCenter.Host.Attributes;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using IGeekFan.AspNetCore.Knife4jUI;
+using SchedulerCenter.Core.Interface;
+using SchedulerCenter.Application.factory;
 
 namespace SchedulerCenter.Host
 {
@@ -117,10 +119,12 @@ namespace SchedulerCenter.Host
             services.AddHttpContextAccessor();
             services.AddHttpClient();
             services.AddSession().AddMemoryCache();
-
-            services.AddSingleton<JobService>();
-            services.AddSingleton<SettingService>();
-
+            services.AddTransient<SettingService>();
+            services.AddTransient<JobServiceFactory>();
+            services.AddTransient<IJobService, JobRemoteService>();
+                  services.AddTransient<IJobService, JobService>();
+          
+            
 
             services.AddQuartz();
 

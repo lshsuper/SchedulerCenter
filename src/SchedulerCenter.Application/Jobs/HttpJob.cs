@@ -13,7 +13,9 @@ using SchedulerCenter.Application.Services;
 using SchedulerCenter.Infrastructure.Utility;
 using SchedulerCenter.Core.Constant;
 using Microsoft.Extensions.Options;
-using SchedulerCenter.Host.Options;
+using SchedulerCenter.Core.Option;
+using SchedulerCenter.Core.Interface;
+using SchedulerCenter.Application.factory;
 
 namespace SchedulerCenter.Application.Jobs
 {
@@ -22,10 +24,10 @@ namespace SchedulerCenter.Application.Jobs
 
 
         readonly  IHttpClientFactory _clientFactory;
-        readonly JobService _jobService;
+        readonly JobServiceFactory _jobServiceFactory;
         public HttpJob() {
             _clientFactory = ServiceLocator.GetService<IHttpClientFactory>();
-            _jobService = ServiceLocator.GetService<JobService>();
+            _jobServiceFactory = ServiceLocator.GetService<JobServiceFactory>();
 
         }
 
@@ -42,6 +44,7 @@ namespace SchedulerCenter.Application.Jobs
             string httpMessage = "",
                    triggerFullName="";
             DateTime dateTime = DateTime.Now;
+            var jobService = await _jobServiceFactory.GetService(context.Scheduler.SchedulerName);
             try
             {
              
@@ -91,7 +94,7 @@ namespace SchedulerCenter.Application.Jobs
 
                var res= await client.SendAsync(req);
                var resStr = await res.Content.ReadAsStringAsync();
-                await _jobService.Logger(new LoggerOPT() { 
+                await jobService.Logger(new LoggerOPT() { 
                     JobGroup= context.JobDetail.Key.Group,
                     JobName=context.JobDetail.Key.Name,
                     TriggerName=trigger.Name,

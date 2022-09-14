@@ -264,7 +264,7 @@ var $taskVue = new Vue({
             //  $taskVue.log.spin = true;
             $taskVue.log.page++;
             $taskVue.ajax("/TaskBackGround/GetRunLog", {
-                taskName: $taskVue.log.title, groupName: $taskVue.log.groupName, page: $taskVue.log.page
+                schedulerName: $taskVue.defaultNode, taskName: $taskVue.log.title, groupName: $taskVue.log.groupName, page: $taskVue.log.page
             }, function (data) {
                 if (data.data.length === 0) {
                     if ($taskVue.log.page >= 1) {
