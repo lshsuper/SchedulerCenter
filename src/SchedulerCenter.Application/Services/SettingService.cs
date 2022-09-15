@@ -39,7 +39,7 @@ namespace SchedulerCenter.Application.Services
         public async Task<bool> SaveOrUpdateNode(string addr, string schedName) {
 
 
-            var node = await _dapperProvider.QueryFirstOrDefaultAsync<NodeModel>("select * from qrtz_nodes where sched_name=@sched_name",new { sched_name=schedName });
+            var node = await _dapperProvider.FindAsync<NodeModel>("select * from qrtz_nodes where sched_name=@sched_name",new { sched_name=schedName });
 
             if (node != null)
             {
@@ -65,7 +65,7 @@ namespace SchedulerCenter.Application.Services
         public async Task<NodeDTO> GetNode(string schedName)
         {
 
-            return await _dapperProvider.QueryFirstOrDefaultAsync<NodeDTO>("select  sched_name as 'SchedName',ID,Addr  from qrtz_nodes where sched_name=@sched_name",new {
+            return await _dapperProvider.FindAsync<NodeDTO>("select  sched_name as 'SchedName',ID,Addr  from qrtz_nodes where sched_name=@sched_name",new {
                 sched_name=schedName,
             });
         }

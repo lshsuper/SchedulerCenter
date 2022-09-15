@@ -17,6 +17,7 @@ namespace SchedulerCenter.Infrastructure.Dapper
             _connCall = connCall;
         }
 
+     
         public Task<int> ExcuteAsync(string sql, object paras=null)
         {
 
@@ -37,7 +38,7 @@ namespace SchedulerCenter.Infrastructure.Dapper
 
         }
 
-        public Task<T> QueryFirstOrDefaultAsync<T>(string sql, object paras = null)
+        public Task<T> FindAsync<T>(string sql, object paras = null)
         {
 
             using (var conn = _connCall())

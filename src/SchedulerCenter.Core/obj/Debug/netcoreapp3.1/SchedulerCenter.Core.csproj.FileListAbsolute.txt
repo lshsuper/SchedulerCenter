@@ -44,3 +44,4 @@ E:\SchedulerCenter\src\SchedulerCenter.Core\bin\{ASPNETCORE_ENVIRONMENT}\netcore
 E:\SchedulerCenter\src\SchedulerCenter.Core\bin\Debug\netcoreapp3.1\SchedulerCenter.Core.xml
 E:\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.xml
 E:\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.csproj.AssemblyReference.cache
+D:\projects\调度配置\Code\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.xml

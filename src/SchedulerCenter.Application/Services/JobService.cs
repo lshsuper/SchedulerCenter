@@ -323,7 +323,7 @@ namespace SchedulerCenter.Application.Services
 
             int offset = (page - 1) * pageSize;
             string countSql = "select count(1) from qrtz_logs where job_name=@job_name and job_group=@job_group";
-            int count = await _dapperProvider.QueryFirstOrDefaultAsync<int>(countSql, new { job_name=taskName, job_group=groupName });
+            int count = await _dapperProvider.FindAsync<int>(countSql, new { job_name=taskName, job_group=groupName });
             string dataSql = "select start_time 'StartTime',end_time 'Endtime',content 'Content' from qrtz_logs where job_name=@job_name and job_group=@job_group  order by id desc limit @offset,@limit";
 
            var data = await _dapperProvider.QueryAsync<LogModel>(dataSql, new { job_name = taskName, job_group = groupName, offset=offset, limit=pageSize });

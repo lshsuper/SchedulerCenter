@@ -4,22 +4,22 @@
         <name>SchedulerCenter.Core</name>
     </assembly>
     <members>
-        <member name="P:SchedulerCenter.Core.Common.JWTConfig.Secret">
+        <member name="P:SchedulerCenter.Core.Common.JwtConfig.Secret">
             <summary>
             密钥 长度不少于16位
             </summary>
         </member>
-        <member name="P:SchedulerCenter.Core.Common.JWTConfig.Issuer">
+        <member name="P:SchedulerCenter.Core.Common.JwtConfig.Issuer">
             <summary>
             发行人
             </summary>
         </member>
-        <member name="P:SchedulerCenter.Core.Common.JWTConfig.Audience">
+        <member name="P:SchedulerCenter.Core.Common.JwtConfig.Audience">
             <summary>
             观众
             </summary>
         </member>
-        <member name="P:SchedulerCenter.Core.Common.JWTConfig.Expire">
+        <member name="P:SchedulerCenter.Core.Common.JwtConfig.Expire">
             <summary>
             访问过期
             </summary>
@@ -49,49 +49,91 @@
             http-header-value
             </summary>
         </member>
+        <member name="M:SchedulerCenter.Core.Interface.IJobService.Init(System.String)">
+             <summary>
+            Init 初始化
+             </summary>
+             <param name="schedName"></param>
+             <returns></returns>
+        </member>
+        <member name="M:SchedulerCenter.Core.Interface.IJobService.AddJob(SchedulerCenter.Core.Option.TaskOPT)">
+             <summary>
+            AddJob 添加
+             </summary>
+             <param name="opt"></param>
+             <returns></returns>
+        </member>
         <member name="M:SchedulerCenter.Core.Interface.IJobService.RemoveJob(System.String,System.String,System.String)">
             <summary>
             RemoveJob 移除任务
             </summary>
+            <param name="schedulerName"></param>
             <param name="jobName"></param>
             <param name="jobGroup"></param>
             <returns></returns>
         </member>
         <member name="M:SchedulerCenter.Core.Interface.IJobService.UpdateJob(SchedulerCenter.Core.Option.TaskOPT)">
-            <summary>
-            更新任务
-            </summary>
-            <param name="opt"></param>
-            <returns></returns>
+             <summary>
+            UpdateJob 更新
+             </summary>
+             <param name="opt"></param>
+             <returns></returns>
         </member>
         <member name="M:SchedulerCenter.Core.Interface.IJobService.StartJob(System.String,System.String,System.String)">
             <summary>
-            开始任务
+            开始
             </summary>
+            <param name="schedulerName"></param>
             <param name="triggerName"></param>
             <param name="triggerGroup"></param>
             <returns></returns>
         </member>
         <member name="M:SchedulerCenter.Core.Interface.IJobService.PauseJob(System.String,System.String,System.String)">
             <summary>
-            暂停任务
+            PauseJob 暂停任务
             </summary>
+            <param name="schedulerName"></param>
             <param name="triggerName"></param>
             <param name="triggerGroup"></param>
             <returns></returns>
         </member>
         <member name="M:SchedulerCenter.Core.Interface.IJobService.GetJobs(System.String)">
             <summary>
-            获取任务列表
+            GetJobs 获取任务列表
             </summary>
+            <param name="schedulerName"></param>
             <returns></returns>
         </member>
         <member name="M:SchedulerCenter.Core.Interface.IJobService.RunJob(System.String,System.String,System.String)">
             <summary>
-            运行任务
+            RunJob 运行任务
             </summary>
+            <param name="schedulerName"></param>
             <param name="jobGroup"></param>
             <param name="jobName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SchedulerCenter.Core.Interface.IJobService.Logger(SchedulerCenter.Core.Option.LoggerOPT)">
+            <summary>
+            RunJob 运行任务
+            </summary>
+            <param name="opt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SchedulerCenter.Core.Interface.IJobService.GetAllSchedulers">
+             <summary>
+            GetAllSchedulers  获取所有的调度
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="M:SchedulerCenter.Core.Interface.IJobService.GetJobLogPage(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            GetJobLogPage 获取日志分页
+            </summary>
+            <param name="taskName"></param>
+            <param name="groupName"></param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
             <returns></returns>
         </member>
         <member name="T:SchedulerCenter.Core.Request.AddJobRequest">

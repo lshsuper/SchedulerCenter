@@ -57,9 +57,11 @@ namespace SchedulerCenter.Host.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ValidateAuthor(string token)
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            string _token = _configuration["token"];
-            string superToken = _configuration["superToken"];
+            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var appSetting = _configuration.GetAppSetting();
+            string _token = appSetting.Token;
+            string superToken = appSetting.SuperToken;
             if (!string.IsNullOrEmpty(token) && (token == _token || token == superToken))
             {
                

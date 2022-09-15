@@ -34,7 +34,7 @@ namespace SchedulerCenter.Host.Controllers
         }
 
         [HttpPost, HttpGet]
-        [TaskAuthorAttribute]
+        [TaskAuthor]
         public IActionResult Log(int pageSize=1)
         {
           return  new ContentResult()

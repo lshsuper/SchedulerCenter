@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SchedulerCenter.Core.Common
 {
-    public class JWTConfig
+    public class JwtConfig
     {
         /// <summary>
         /// 密钥 长度不少于16位
