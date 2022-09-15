@@ -28,9 +28,9 @@ namespace SchedulerCenter.Hostx
                Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
                    .ConfigureWebHostDefaults(webBuilder =>
                    {
-                      // webBuilder.UseKestrel().UseUrls("http://*:9950");
-                       webBuilder.UseIIS();
+                       webBuilder.UseKestrel().UseUrls("http://localhost:6000");
                        webBuilder.UseStartup<Startup>();
+                      
                    });
     }
 }
