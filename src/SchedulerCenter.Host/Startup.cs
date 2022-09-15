@@ -115,7 +115,7 @@ namespace SchedulerCenter.Host
                 options.Filters.Add(new AuthorizeFilter(policy));
                 options.Filters.Add(typeof(TaskAuthorizeFilter));
             }).AddRazorRuntimeCompilation();
-
+            services.AddTransient(typeof(Lazy<>));
             services.AddHttpContextAccessor();
             services.AddHttpClient();
             services.AddSession().AddMemoryCache();

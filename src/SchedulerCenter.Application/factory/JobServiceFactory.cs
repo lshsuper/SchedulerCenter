@@ -20,7 +20,7 @@ namespace SchedulerCenter.Application.factory
 
 
             _configuration = configuration;
-          
+         
             _jobService = jobServiceArr.FirstOrDefault(f=>f.GetType()==typeof(JobService));
             _jobRemoteService = jobServiceArr.FirstOrDefault(f => f.GetType() == typeof(JobRemoteService));
         }
