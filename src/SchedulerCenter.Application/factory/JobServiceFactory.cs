@@ -26,7 +26,7 @@ namespace SchedulerCenter.Application.factory
             _jobRemoteService = jobServiceArr.FirstOrDefault(f => f.GetType() == typeof(JobRemoteService));
         }
 
-        /// <summary>
+        /// <summary>8
         /// GetService 获取Service
         /// </summary>
         /// <param name="schedName"></param>

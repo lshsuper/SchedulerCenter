@@ -11,6 +11,17 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       }
+    },
+    ".NETCoreApp,Version=v3.1/linux-x64": {
+      "Newtonsoft.Json/13.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+        }
+      }
     }
   },
   "libraries": {
@@ -48,24 +59,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Administrator\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\13089\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\projects\\调度配置\\Code\\SchedulerCenter\\src\\SchedulerCenter.Core\\SchedulerCenter.Core.csproj",
+      "projectUniqueName": "E:\\SchedulerCenter\\src\\SchedulerCenter.Core\\SchedulerCenter.Core.csproj",
       "projectName": "SchedulerCenter.Core",
-      "projectPath": "D:\\projects\\调度配置\\Code\\SchedulerCenter\\src\\SchedulerCenter.Core\\SchedulerCenter.Core.csproj",
-      "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "D:\\projects\\调度配置\\Code\\SchedulerCenter\\src\\SchedulerCenter.Core\\obj\\",
+      "projectPath": "E:\\SchedulerCenter\\src\\SchedulerCenter.Core\\SchedulerCenter.Core.csproj",
+      "packagesPath": "C:\\Users\\13089\\.nuget\\packages\\",
+      "outputPath": "E:\\SchedulerCenter\\src\\SchedulerCenter.Core\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\13089\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -111,7 +117,12 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.411\\RuntimeIdentifierGraph.json"
+      }
+    },
+    "runtimes": {
+      "linux-x64": {
+        "#import": []
       }
     }
   }

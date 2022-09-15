@@ -10,7 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SchedulerCenter.Host;
 
-namespace SchedulerCenter.Hostx
+namespace SchedulerCenter.Host
 {
     public class Program
     {
@@ -28,7 +28,7 @@ namespace SchedulerCenter.Hostx
                Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
                    .ConfigureWebHostDefaults(webBuilder =>
                    {
-                       webBuilder.UseKestrel().UseUrls("http://localhost:6000");
+                       webBuilder.UseKestrel().UseUrls("http://*:9000");
                        webBuilder.UseStartup<Startup>();
                       
                    });
