@@ -10,6 +10,7 @@ using SchedulerCenter.Core.Option;
 using SchedulerCenter.Core.Request;
 using SchedulerCenter.Host.Attributes;
 using SchedulerCenter.Host.Models;
+using SchedulerCenter.Infrastructure.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -53,11 +54,12 @@ namespace SchedulerCenter.Host.Controllers
 
             if (string.IsNullOrEmpty(ticket)) return ApiResult<string>.Error("[ticket]不能为空");
 
-            string _token = _configuration["token"];
-            string superToken = _configuration["superToken"];
+            var appSetting = _configuration.GetAppSetting();
+            string _token = appSetting.Token;
+            string superToken =appSetting.SuperToken;
             if (_token != ticket && superToken != ticket) return ApiResult<string>.Error("[ticket]不合法");
 
-            var jwtConfig = _configuration.GetSection("JwtConfig").Get<JWTConfig>();
+            var jwtConfig = appSetting.JwtConfig;
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim("Ticket", ticket));
             var creds = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Secret)), SecurityAlgorithms.HmacSha256);

@@ -49,7 +49,7 @@ namespace SchedulerCenter.Host
         public void ConfigureServices(IServiceCollection services)
         {
 
-            var jwtConfig = Configuration.GetSection("JwtConfig").Get<JWTConfig>();
+            var jwtConfig = Configuration.GetAppSetting().JwtConfig;
 
             services.AddAuthentication(options =>
             {
@@ -147,7 +147,6 @@ namespace SchedulerCenter.Host
                     var info = f.GetCustomAttributes(typeof(SwaggerGroupInfoAttribute), false).OfType<SwaggerGroupInfoAttribute>().FirstOrDefault();
                     c.SwaggerDoc(f.Name, new OpenApiInfo
                     {
-                       
                         Title = info.Title,
                         Version = info.Version,
                         Description = $"{info.Description} build at:{lastBuildTime}"
@@ -224,6 +223,8 @@ namespace SchedulerCenter.Host
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
+            var appSetting = Configuration.GetAppSetting();
+
             ServiceLocator.Init(app.ApplicationServices);
             if (env.IsDevelopment())
             {
@@ -263,15 +264,15 @@ namespace SchedulerCenter.Host
             app.UseQuartz(new InitConfig
             {
 
-                ConnectionString = Configuration.GetConnectionString("connStr"),
-                DbProviderName = Configuration["DbProvider"],
-                SchedulerName = Configuration["SchedulerName"]
+                ConnectionString = appSetting.DbConnStr,
+                DbProviderName = appSetting.DbProvider,
+                SchedulerName = appSetting.SchedulerName
 
             }).UseStaticHttpContext();
 
             //启动时注册节点
             var settingService = app.ApplicationServices.GetRequiredService<SettingService>();
-            settingService.SaveOrUpdateNode(Configuration["SchedulerAddr"], Configuration["SchedulerName"]).GetAwaiter();
+            settingService.SaveOrUpdateNode(appSetting.SchedulerHost, appSetting.SchedulerName).GetAwaiter();
             app.UseStaticFiles();
 
             app.UseRouting();
