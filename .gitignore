@@ -92,7 +92,6 @@ StyleCopReport.xml
 *.pidb
 *.svclog
 *.scc
-*.DotSettings
 
 # Chutzpah Test files
 _Chutzpah*
@@ -127,9 +126,6 @@ $tf/
 _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
-
-# JustCode is a .NET coding add-in
-.JustCode
 
 # TeamCity is a build add-in
 _TeamCity*
@@ -171,7 +167,7 @@ DocProject/Help/Html2
 DocProject/Help/html
 
 # Click-Once directory
-#publish/
+publish/
 
 # Publish Web Output
 *.[Pp]ublish.xml
@@ -230,7 +226,7 @@ ClientBin/
 *.dbmdl
 *.dbproj.schemaview
 *.jfm
-# *.pfx
+*.pfx
 *.publishsettings
 orleans.codegen.cs
 
@@ -353,12 +349,11 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-**/app
-
-#**/_.Libs
-
-*.vspscc
-
-.idea/
-.vscode/
-
+/SchedulerCenter/src/SchedulerCenter.Application/obj/*
+/SchedulerCenter/src/SchedulerCenter.Application/bin/*
+/SchedulerCenter/src/SchedulerCenter.Core/bin/*
+/SchedulerCenter/src/SchedulerCenter.Core/obj/*
+/SchedulerCenter/src/SchedulerCenter.Infrastructure/obj/*
+/SchedulerCenter/src/SchedulerCenter.Infrastructure/bin/*
+/SchedulerCenter/src/SchedulerCenter.Host/obj/*
+/SchedulerCenter/src/SchedulerCenter.Host/bin/*
