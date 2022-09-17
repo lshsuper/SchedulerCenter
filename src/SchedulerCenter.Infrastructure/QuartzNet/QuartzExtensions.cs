@@ -16,32 +16,17 @@ namespace SchedulerCenter.Infrastructure.QuartzNet
         /// </summary>
         /// <param name="services"></param>
         /// <param name="conf"></param>
-        public static void AddQuartz(this IServiceCollection services)
+        public static void AddQuartz(this IServiceCollection services, InitConfig conf)
         {
 
-            services.AddSingleton(new QuartzProvider());
+            var provider = new QuartzProvider();
+            provider.Init(conf).Wait();
+            services.AddSingleton(provider);
+            return;
 
         }
 
 
-        /// <summary>
-        /// UseQuartz 启用Quartz
-        /// </summary>
-        /// <param name="applicationBuilder"></param>
-        /// <param name="env"></param>
-        /// <returns></returns>
-        public static IApplicationBuilder UseQuartz(this IApplicationBuilder applicationBuilder, InitConfig conf)
-        {
-
-
-            var services = applicationBuilder.ApplicationServices;
-
-            var quartzProvider = services.GetService<QuartzProvider>();
-            //初始化
-            quartzProvider.Init(conf).GetAwaiter();
-           
-            return applicationBuilder;
-        }
-
+      
     }
 }

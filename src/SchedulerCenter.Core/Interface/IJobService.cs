@@ -2,7 +2,6 @@
 using SchedulerCenter.Core.DTO;
 using SchedulerCenter.Core.Option;
 using SchedulerCenter.Host.Models;
-using SchedulerCenter.Core.Option;
 using System;
 using System.Collections.Generic;
 using System.Text;

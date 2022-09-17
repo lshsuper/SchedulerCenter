@@ -11,6 +11,7 @@ using SchedulerCenter.Core.Request;
 using SchedulerCenter.Host.Attributes;
 using SchedulerCenter.Host.Models;
 using SchedulerCenter.Infrastructure.Extensions;
+using SchedulerCenter.Infrastructure.Jwt;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -54,23 +55,16 @@ namespace SchedulerCenter.Host.Controllers
 
             if (string.IsNullOrEmpty(ticket)) return ApiResult<string>.Error("[ticket]不能为空");
 
-            var appSetting = _configuration.GetAppSetting();
+            var appSetting = _configuration.Get<AppSetting>();
             string _token = appSetting.Token;
             string superToken =appSetting.SuperToken;
             if (_token != ticket && superToken != ticket) return ApiResult<string>.Error("[ticket]不合法");
 
-            var jwtConfig = appSetting.JwtConfig;
-            List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim("Ticket", ticket));
-            var creds = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Secret)), SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(
-                issuer: jwtConfig.Issuer,
-                audience: jwtConfig.Audience,
-                claims: claims,
-                expires: DateTime.Now.AddSeconds(jwtConfig.Expire),
-                signingCredentials: creds
-                );
-            var t = new JwtSecurityTokenHandler().WriteToken(token);
+            var t = JwtUtil.GetToken(appSetting.JwtConfig,new Dictionary<string, object>() { 
+            
+                ["Ticket"]=ticket,
+
+            });
             return ApiResult<string>.OK(t);
 
         }

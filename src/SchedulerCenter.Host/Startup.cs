@@ -31,6 +31,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using IGeekFan.AspNetCore.Knife4jUI;
 using SchedulerCenter.Core.Interface;
 using SchedulerCenter.Application.factory;
+using SchedulerCenter.Core.Contant;
 
 namespace SchedulerCenter.Host
 {
@@ -49,7 +50,7 @@ namespace SchedulerCenter.Host
         public void ConfigureServices(IServiceCollection services)
         {
 
-            var jwtConfig = Configuration.GetAppSetting().JwtConfig;
+            var appSetting = Configuration.Get<AppSetting>();
 
             services.AddAuthentication(options =>
             {
@@ -72,11 +73,11 @@ namespace SchedulerCenter.Host
             {
                 option.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidIssuer = jwtConfig.Issuer,
-                    ValidAudience = jwtConfig.Audience,
+                    ValidIssuer = appSetting.JwtConfig.Issuer,
+                    ValidAudience = appSetting.JwtConfig.Audience,
                     ValidateIssuer = true,
                     ValidateLifetime = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Secret)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSetting.JwtConfig.Secret)),
                     //缓冲过期时间，总的有效时间等于这个时间加上jwt的过期时间
                     ClockSkew = TimeSpan.FromSeconds(0),
 
@@ -91,7 +92,7 @@ namespace SchedulerCenter.Host
                     {
 
 
-                        ctx.Token = ctx.Request.Headers["SC-TOKEN"];
+                        ctx.Token = ctx.Request.Headers[AppKey.JwtTokenKey];
 
                         return Task.CompletedTask;
 
@@ -126,13 +127,22 @@ namespace SchedulerCenter.Host
           
             
 
-            services.AddQuartz();
+            services.AddQuartz(new InitConfig
+            {
+
+                ConnectionString = appSetting.DbConnStr,
+                DbProviderName = appSetting.DbProvider,
+                SchedulerName = appSetting.SchedulerName
+
+            });
 
             services.AddDapper(() =>
             {
                 var _quartzProvider = services.BuildServiceProvider().GetRequiredService<QuartzProvider>();
                 return _quartzProvider.GetDbProvider().CreateConnection();
             });
+
+         
 
             services.AddSwaggerGen(c =>
             {
@@ -223,7 +233,10 @@ namespace SchedulerCenter.Host
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
-            var appSetting = Configuration.GetAppSetting();
+            var appSetting = Configuration.Get<AppSetting>();
+            //启动时注册节点
+            var settingService = app.ApplicationServices.GetRequiredService<SettingService>();
+            settingService.SaveOrUpdateNode(appSetting.SchedulerHost, appSetting.SchedulerName).GetAwaiter();
 
             ServiceLocator.Init(app.ApplicationServices);
             if (env.IsDevelopment())
@@ -257,22 +270,10 @@ namespace SchedulerCenter.Host
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
-
-
-
-            app.UseQuartz(new InitConfig
-            {
-
-                ConnectionString = appSetting.DbConnStr,
-                DbProviderName = appSetting.DbProvider,
-                SchedulerName = appSetting.SchedulerName
-
             }).UseStaticHttpContext();
 
-            //启动时注册节点
-            var settingService = app.ApplicationServices.GetRequiredService<SettingService>();
-            settingService.SaveOrUpdateNode(appSetting.SchedulerHost, appSetting.SchedulerName).GetAwaiter();
+
+          
             app.UseStaticFiles();
 
             app.UseRouting();

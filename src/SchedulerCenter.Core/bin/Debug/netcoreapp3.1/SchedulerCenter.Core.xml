@@ -4,26 +4,6 @@
         <name>SchedulerCenter.Core</name>
     </assembly>
     <members>
-        <member name="P:SchedulerCenter.Core.Common.JwtConfig.Secret">
-            <summary>
-            密钥 长度不少于16位
-            </summary>
-        </member>
-        <member name="P:SchedulerCenter.Core.Common.JwtConfig.Issuer">
-            <summary>
-            发行人
-            </summary>
-        </member>
-        <member name="P:SchedulerCenter.Core.Common.JwtConfig.Audience">
-            <summary>
-            观众
-            </summary>
-        </member>
-        <member name="P:SchedulerCenter.Core.Common.JwtConfig.Expire">
-            <summary>
-            访问过期
-            </summary>
-        </member>
         <member name="T:SchedulerCenter.Core.Constant.HttpJobDetailKey">
             <summary>
             HttpJobDetailKey 任务扩展map

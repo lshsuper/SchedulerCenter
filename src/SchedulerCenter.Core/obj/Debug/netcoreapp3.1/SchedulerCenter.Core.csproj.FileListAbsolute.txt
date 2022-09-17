@@ -45,3 +45,6 @@ D:\projects\调度配置\Code\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug
 D:\projects\调度配置\Code\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.dll
 D:\projects\调度配置\Code\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.xml
 D:\projects\调度配置\Code\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.pdb
+E:\SchedulerCenter\src\SchedulerCenter.Core\bin\Debug\netcoreapp3.1\SchedulerCenter.Infrastructure.dll
+E:\SchedulerCenter\src\SchedulerCenter.Core\bin\Debug\netcoreapp3.1\SchedulerCenter.Infrastructure.pdb
+E:\SchedulerCenter\src\SchedulerCenter.Core\obj\Debug\netcoreapp3.1\SchedulerCenter.Core.csproj.CopyComplete

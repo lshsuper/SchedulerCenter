@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SchedulerCenter.Application.Services;
+using SchedulerCenter.Core.Common;
 using SchedulerCenter.Core.Interface;
 using SchedulerCenter.Infrastructure.Extensions;
 using System;
@@ -34,7 +35,7 @@ namespace SchedulerCenter.Application.factory
         public async Task<IJobService> GetService(string schedName) {
 
             //判断是远程还是本地
-            var appSetting = _configuration.GetAppSetting();
+            var appSetting = _configuration.Get<AppSetting>();
 
             if (appSetting.SchedulerName == schedName) {
                 //本地调度
