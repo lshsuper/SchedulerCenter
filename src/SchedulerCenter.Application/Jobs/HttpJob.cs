@@ -15,7 +15,7 @@ using SchedulerCenter.Core.Constant;
 using Microsoft.Extensions.Options;
 using SchedulerCenter.Core.Option;
 using SchedulerCenter.Core.Interface;
-using SchedulerCenter.Application.factory;
+using SchedulerCenter.Application.factorys;
 
 namespace SchedulerCenter.Application.Jobs
 {

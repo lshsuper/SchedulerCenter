@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SchedulerCenter.Application.factory
+namespace SchedulerCenter.Application.factorys
 {
   public  class JobServiceFactory
     {

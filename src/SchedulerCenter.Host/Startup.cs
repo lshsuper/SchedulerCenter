@@ -30,7 +30,7 @@ using SchedulerCenter.Host.Attributes;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using IGeekFan.AspNetCore.Knife4jUI;
 using SchedulerCenter.Core.Interface;
-using SchedulerCenter.Application.factory;
+using SchedulerCenter.Application.factorys;
 using SchedulerCenter.Core.Contant;
 
 namespace SchedulerCenter.Host
@@ -39,18 +39,18 @@ namespace SchedulerCenter.Host
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            configuration = configuration;
 
         }
 
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration _configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
-            var appSetting = Configuration.Get<AppSetting>();
+            var appSetting = _configuration.Get<AppSetting>();
 
             services.AddAuthentication(options =>
             {
@@ -116,7 +116,7 @@ namespace SchedulerCenter.Host
                 options.Filters.Add(new AuthorizeFilter(policy));
                 options.Filters.Add(typeof(TaskAuthorizeFilter));
             }).AddRazorRuntimeCompilation();
-            services.AddTransient(typeof(Lazy<>));
+          
             services.AddHttpContextAccessor();
             services.AddHttpClient();
             services.AddSession().AddMemoryCache();
@@ -233,7 +233,7 @@ namespace SchedulerCenter.Host
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
-            var appSetting = Configuration.Get<AppSetting>();
+            var appSetting = _configuration.Get<AppSetting>();
             //启动时注册节点
             var settingService = app.ApplicationServices.GetRequiredService<SettingService>();
             settingService.SaveOrUpdateNode(appSetting.SchedulerHost, appSetting.SchedulerName).GetAwaiter();
