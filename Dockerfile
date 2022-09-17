@@ -9,7 +9,6 @@ RUN cp  /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 
 #切换到具体源码路径
-WORKDIR /src
 COPY  src/ /src
 
 #切换到具体的启动项目路径
