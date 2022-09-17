@@ -47,10 +47,10 @@ namespace SchedulerCenter.Application.factorys
 
         }
 
-        public async Task<IJobService> GetLocatService(string schedName)
+        public async Task<IJobService> GetLocatService()
         {
             //本地调度
-            return await _jobService.Init(schedName);           
+            return await _jobService.Init("");           
 
         }
 

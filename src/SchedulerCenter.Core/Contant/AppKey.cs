@@ -7,7 +7,14 @@ namespace SchedulerCenter.Core.Contant
    public class AppKey
     {
 
-       public const string JwtTokenKey = "SC-TOKEN";
+        /// <summary>
+        /// JwtTokenKey
+        /// </summary>
+        public const string JwtTokenKey = "SC-TOKEN";
+        /// <summary>
+        /// SessionKey
+        /// </summary>
+        public const string SessionKey = "SC-SESSION";
 
     }
 }

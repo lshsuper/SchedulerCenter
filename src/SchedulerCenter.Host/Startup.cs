@@ -35,18 +35,26 @@ using SchedulerCenter.Core.Contant;
 
 namespace SchedulerCenter.Host
 {
+    /// <summary>
+    /// Startup 启动类
+    /// </summary>
     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
-            configuration = configuration;
+            _configuration = configuration;
 
         }
 
-
+        /// <summary>
+        /// 配置对象
+        /// </summary>
         public IConfiguration _configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// ConfigureServices
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
 
@@ -66,9 +74,7 @@ namespace SchedulerCenter.Host
                 options.ClaimsIssuer = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromSeconds(60);
-                options.Cookie.Name = "SC-SESSION";
-
-
+                options.Cookie.Name = AppKey.SessionKey;
             }).AddJwtBearer(option =>
             {
                 option.TokenValidationParameters = new TokenValidationParameters
@@ -81,33 +87,25 @@ namespace SchedulerCenter.Host
                     //缓冲过期时间，总的有效时间等于这个时间加上jwt的过期时间
                     ClockSkew = TimeSpan.FromSeconds(0),
 
-
-
                 };
 
                 option.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents()
                 {
-
                     OnMessageReceived = (ctx) =>
                     {
-
-
                         ctx.Token = ctx.Request.Headers[AppKey.JwtTokenKey];
-
                         return Task.CompletedTask;
-
                     }
-
                 };
-
             }); ;
 
-            services.AddControllers()
-              .AddNewtonsoftJson(op =>
+            services.AddControllersWithViews()
+                    .AddNewtonsoftJson(op =>
               {
-                  op.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                  op.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+                      op.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                      op.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
               });
+
             services.AddMvc(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()
@@ -115,18 +113,17 @@ namespace SchedulerCenter.Host
                                 .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
                 options.Filters.Add(typeof(TaskAuthorizeFilter));
-            }).AddRazorRuntimeCompilation();
+            }).AddRazorRuntimeCompilation().SetCompatibilityVersion(CompatibilityVersion.Version_3_0); 
           
             services.AddHttpContextAccessor();
             services.AddHttpClient();
             services.AddSession().AddMemoryCache();
-            services.AddTransient<SettingService>();
-            services.AddTransient<JobServiceFactory>();
-            services.AddTransient<IJobService, JobRemoteService>();
-                  services.AddTransient<IJobService, JobService>();
+
+
+            services.RegisterService();
+            services.RegisterFactory();
           
             
-
             services.AddQuartz(new InitConfig
             {
 
@@ -220,19 +217,20 @@ namespace SchedulerCenter.Host
             });
 
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
-
-
-
-
+           
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// Configure
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
+          
             var appSetting = _configuration.Get<AppSetting>();
             //启动时注册节点
             var settingService = app.ApplicationServices.GetRequiredService<SettingService>();
@@ -254,17 +252,13 @@ namespace SchedulerCenter.Host
            
             app.UseKnife4UI(c =>
             {
-
-                typeof(SwaggerApiGroupName).GetFields().Skip(1).ToList().ForEach(f =>
+                typeof(SwaggerApiGroupName).GetFields().Skip(1).ForEach((f,i) =>
                 {
                     //获取枚举值上的特性
                     var info = f.GetCustomAttributes(typeof(SwaggerGroupInfoAttribute), false).OfType<SwaggerGroupInfoAttribute>().FirstOrDefault();
                     c.SwaggerEndpoint($"/{f.Name}/swagger.json", f.Name);
                     c.RoutePrefix = "api-doc";
-
                 });
-
-
             });
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
@@ -273,9 +267,8 @@ namespace SchedulerCenter.Host
             }).UseStaticHttpContext();
 
 
-          
-            app.UseStaticFiles();
 
+            app.UseStaticFiles();
             app.UseRouting();
 
             app.UseAuthentication();
@@ -288,7 +281,7 @@ namespace SchedulerCenter.Host
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapSwagger("/api-doc/{documentName}/swagger.json");
-
+                
             });
 
 

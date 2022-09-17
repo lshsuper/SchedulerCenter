@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using SchedulerCenter.Application.factorys;
 using SchedulerCenter.Application.Services;
 using SchedulerCenter.Core.Common;
+using SchedulerCenter.Core.Interface;
 using SchedulerCenter.Core.Option;
 using SchedulerCenter.Core.Request;
 using SchedulerCenter.Host.Attributes;
@@ -27,42 +29,46 @@ namespace SchedulerCenter.Host.Controllers
     /// <summary>
     /// 对外API
     /// </summary>
-    [Route("api/[controller]/[action]"), ApiController, Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+   
+    [ApiController,Route("api/[controller]/[action]"), Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class OpenApiController : ControllerBase
     {
-        private readonly JobService _jobService;
+        private readonly JobServiceFactory _jobServiceFactory;
 
         private readonly IConfiguration _configuration;
+        private IJobService _jobService;
         /// <summary>
         /// 开放API-构造器
         /// </summary>
         /// <param name="configuration"></param>
-        public OpenApiController(IConfiguration configuration, JobService jobService)
+        /// <param name="jobServiceFactory"></param>
+        public OpenApiController(IConfiguration configuration, JobServiceFactory jobServiceFactory)
         {
             _configuration = configuration;
-            _jobService = jobService;
+            _jobServiceFactory = jobServiceFactory;
+           
         }
 
         #region +Open-API-Common
         /// <summary>
-        ///获取SC-TOKEN
+        /// 获取SC-TOKEN
         /// </summary>
-        /// <param name="ticket">票据码</param>
+        /// <param name="req"></param>
         /// <returns></returns>
-        [SwaggerApiGroup(SwaggerApiGroupName.Common), HttpGet, AllowAnonymous]
-        public ApiResult<string> Authorization(string ticket)
+        [SwaggerApiGroup(SwaggerApiGroupName.Common, SwaggerApiGroupName.All), AllowAnonymous, HttpPost]
+        public ApiResult<string> Authorization(AuthorizationRequest req)
         {
 
-            if (string.IsNullOrEmpty(ticket)) return ApiResult<string>.Error("[ticket]不能为空");
+            if (string.IsNullOrEmpty(req.Ticket)) return ApiResult<string>.Error("[ticket]不能为空");
 
             var appSetting = _configuration.Get<AppSetting>();
             string _token = appSetting.Token;
             string superToken =appSetting.SuperToken;
-            if (_token != ticket && superToken != ticket) return ApiResult<string>.Error("[ticket]不合法");
+            if (_token != req.Ticket && superToken != req.Ticket) return ApiResult<string>.Error("[ticket]不合法");
 
             var t = JwtUtil.GetToken(appSetting.JwtConfig,new Dictionary<string, object>() { 
             
-                ["Ticket"]=ticket,
+                ["Ticket"]= req.Ticket,
 
             });
             return ApiResult<string>.OK(t);
@@ -75,7 +81,8 @@ namespace SchedulerCenter.Host.Controllers
         /// 测试
         /// </summary>
         /// <returns></returns>
-        [SwaggerApiGroup(SwaggerApiGroupName.Other), HttpGet]
+     
+        [SwaggerApiGroup(SwaggerApiGroupName.Other, SwaggerApiGroupName.All), AllowAnonymous, HttpGet]
         public string Test()
         {
 
@@ -90,8 +97,10 @@ namespace SchedulerCenter.Host.Controllers
         /// 获取所有的作业
         /// </summary>
         /// <returns></returns>
+        [SwaggerApiGroup(SwaggerApiGroupName.Job, SwaggerApiGroupName.All), HttpGet]
         public async Task<ApiResult<IEnumerable<TaskOPT>>> GetJobs(string schedulerName)
         {
+            var _jobService = await  _jobServiceFactory.GetService(schedulerName);
             return await _jobService.GetJobs(schedulerName);
         }
 
@@ -103,10 +112,10 @@ namespace SchedulerCenter.Host.Controllers
         /// <param name="groupName"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        [SwaggerApiGroup(SwaggerApiGroupName.Job), HttpGet]
+        [SwaggerApiGroup(SwaggerApiGroupName.Job, SwaggerApiGroupName.All), HttpGet]
         public async Task<ApiResult<IEnumerable<TaskLogDTO>>> GetRunLog(string taskName, string groupName, int page = 1)
         {
-
+            var _jobService = await _jobServiceFactory.GetLocatService();
             return await _jobService.GetJobLogPage(taskName, groupName, page);
         }
 
@@ -116,9 +125,10 @@ namespace SchedulerCenter.Host.Controllers
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        [SwaggerApiGroup(SwaggerApiGroupName.Job), HttpPost]
+        [SwaggerApiGroup(SwaggerApiGroupName.Job, SwaggerApiGroupName.All), HttpPost]
         public async Task<ApiResult<bool>> AddJob(AddJobRequest req)
         {
+            var _jobService = await _jobServiceFactory.GetService(req.SchedulerName);
             return await _jobService.AddJob(new TaskOPT
             {
 
@@ -139,9 +149,10 @@ namespace SchedulerCenter.Host.Controllers
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        [SwaggerApiGroup(SwaggerApiGroupName.Job), HttpDelete]
+        [SwaggerApiGroup(SwaggerApiGroupName.Job, SwaggerApiGroupName.All), HttpDelete]
         public async Task<ApiResult<bool>> RemoveJob(RemoveJobRequest req)
         {
+            var _jobService = await _jobServiceFactory.GetService(req.SchedulerName);
             return await _jobService.RemoveJob(req.SchedulerName, req.TaskName, req.GroupName);
         }
         /// <summary>
@@ -149,9 +160,10 @@ namespace SchedulerCenter.Host.Controllers
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        [SwaggerApiGroup(SwaggerApiGroupName.Job), HttpPut]
+        [SwaggerApiGroup(SwaggerApiGroupName.Job, SwaggerApiGroupName.All), HttpPut]
         public async Task<ApiResult<bool>> UpdateJob(UpdateJobRequest req)
         {
+            var _jobService = await _jobServiceFactory.GetService(req.SchedulerName);
             return await _jobService.UpdateJob(new TaskOPT
             {
 
@@ -172,9 +184,10 @@ namespace SchedulerCenter.Host.Controllers
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        [SwaggerApiGroup(SwaggerApiGroupName.Job), HttpPatch]
+        [SwaggerApiGroup(SwaggerApiGroupName.Job, SwaggerApiGroupName.All), HttpPatch]
         public async Task<ApiResult<bool>> PauseJOb(PauseJobRequest req)
         {
+            var _jobService = await _jobServiceFactory.GetService(req.SchedulerName);
             return await _jobService.PauseJob(req.SchedulerName, req.TaskName, req.GroupName);
         }
         /// <summary>
@@ -182,9 +195,10 @@ namespace SchedulerCenter.Host.Controllers
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        [SwaggerApiGroup(SwaggerApiGroupName.Job), HttpPatch]
+        [SwaggerApiGroup(SwaggerApiGroupName.Job, SwaggerApiGroupName.All), HttpPatch]
         public async Task<ApiResult<bool>> StartJob(StartJobRequest req)
         {
+            var _jobService = await _jobServiceFactory.GetService(req.SchedulerName);
             return await _jobService.StartJob(req.SchedulerName, req.TaskName, req.GroupName);
         }
 
@@ -193,9 +207,10 @@ namespace SchedulerCenter.Host.Controllers
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        [SwaggerApiGroup(SwaggerApiGroupName.Job), HttpPatch]
+        [SwaggerApiGroup(SwaggerApiGroupName.Job, SwaggerApiGroupName.All), HttpPatch]
         public async Task<ApiResult<bool>> RunJob(RunJobRequest req)
         {
+            var _jobService = await _jobServiceFactory.GetService(req.SchedulerName);
             return await _jobService.RunJob(req.SchedulerName, req.GroupName, req.TaskName);
         }
 

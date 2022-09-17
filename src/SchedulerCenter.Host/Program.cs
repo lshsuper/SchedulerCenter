@@ -28,8 +28,9 @@ namespace SchedulerCenter.Host
                Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
                    .ConfigureWebHostDefaults(webBuilder =>
                    {
-                       webBuilder.UseKestrel().UseUrls("http://*:9000");
-                       webBuilder.UseStartup<Startup>();
+                       
+                       webBuilder.UseKestrel().UseUrls("http://*:9000").UseStartup<Startup>();
+
                       
                    });
     }

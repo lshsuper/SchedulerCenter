@@ -4,6 +4,16 @@
         <name>SchedulerCenter.Core</name>
     </assembly>
     <members>
+        <member name="F:SchedulerCenter.Core.Contant.AppKey.JwtTokenKey">
+            <summary>
+            JwtTokenKey
+            </summary>
+        </member>
+        <member name="F:SchedulerCenter.Core.Contant.AppKey.SessionKey">
+            <summary>
+            SessionKey
+            </summary>
+        </member>
         <member name="T:SchedulerCenter.Core.Constant.HttpJobDetailKey">
             <summary>
             HttpJobDetailKey 任务扩展map
@@ -164,6 +174,16 @@
         <member name="P:SchedulerCenter.Core.Request.AddJobRequest.SchedulerName">
             <summary>
             调取器名称
+            </summary>
+        </member>
+        <member name="T:SchedulerCenter.Core.Request.AuthorizationRequest">
+            <summary>
+            请求体-获取Token
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.AuthorizationRequest.Ticket">
+            <summary>
+            票据码
             </summary>
         </member>
         <member name="T:SchedulerCenter.Core.Request.PauseJobRequest">
