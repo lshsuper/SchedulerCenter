@@ -66,11 +66,7 @@ namespace SchedulerCenter.Host.Controllers
             string superToken =appSetting.SuperToken;
             if (_token != req.Ticket && superToken != req.Ticket) return ApiResult<string>.Error("[ticket]不合法");
 
-            var t = JwtUtil.GetToken(appSetting.JwtConfig,new Dictionary<string, object>() { 
-            
-                ["Ticket"]= req.Ticket,
-
-            });
+            var t = JwtUtil<SCToken>.GetToken(appSetting.JwtConfig,new SCToken { Ticket=req.Ticket});
             return ApiResult<string>.OK(t);
 
         }
@@ -83,10 +79,10 @@ namespace SchedulerCenter.Host.Controllers
         /// <returns></returns>
      
         [SwaggerApiGroup(SwaggerApiGroupName.Other, SwaggerApiGroupName.All), AllowAnonymous, HttpGet]
-        public string Test()
+        public object Test(string token)
         {
 
-            return "ok";
+            return JwtUtil<SCToken>.ParseToken(token);
 
         }
         #endregion

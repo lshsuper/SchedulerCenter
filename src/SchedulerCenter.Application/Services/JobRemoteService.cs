@@ -52,9 +52,7 @@ namespace SchedulerCenter.Application.Services
 
 
            var appSetting=_configuration.Get<AppSetting>();
-           var token = JwtUtil.GetToken(appSetting.JwtConfig,new Dictionary<string, object>() { 
-                  ["Ticket"]=appSetting.SuperToken,
-           });
+           var token = JwtUtil<SCToken>.GetToken(appSetting.JwtConfig,new SCToken {Ticket=appSetting.SuperToken });
            var client = _clientFactory.CreateClient();
            client.DefaultRequestHeaders.Add(AppKey.JwtTokenKey, token);
            client.BaseAddress =new Uri(_host);

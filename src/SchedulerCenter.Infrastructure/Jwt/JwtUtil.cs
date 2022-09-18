@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using SchedulerCenter.Infrastructure.Extensions;
 using System;
 using System.Collections.Generic;
@@ -8,15 +9,18 @@ using System.Text;
 
 namespace SchedulerCenter.Infrastructure.Jwt
 {
-   public class JwtUtil
+   public class JwtUtil<T> where T:class,new()
     {
 
-        public static  string GetToken(JwtConfig cnf,Dictionary<string,object>kMap)
+        public static  string GetToken(JwtConfig cnf,T claim)
         {
             List<Claim> claims = new List<Claim>();
-            kMap.ForEach((ele,i)=> {
-                claims.Add(new Claim(ele.Key, ele.Value.ToString()));
+
+            claim.GetType().GetProperties().ForEach((ele, i) => {
+              
+                claims.Add(new Claim(ele.Name, ele.GetValue(claim).ToString()));
             });
+        
            
             var creds = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(cnf.Secret)), SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(
@@ -28,6 +32,12 @@ namespace SchedulerCenter.Infrastructure.Jwt
                 );
             var t = new JwtSecurityTokenHandler().WriteToken(token);
             return t;
+        }
+
+        public static T ParseToken(string token) {
+
+            return JsonConvert.DeserializeObject<T>(new JwtSecurityToken(token).Payload.SerializeToJson());
+
         }
 
     }
