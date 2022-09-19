@@ -9,7 +9,11 @@ using System.Threading.Tasks;
 
 namespace SchedulerCenter.Core.Interface
 {
-  public  interface IJobService
+
+    /// <summary>
+    /// 任务Service
+    /// </summary>
+    public interface IJobService
     {
 
 
@@ -100,7 +104,7 @@ namespace SchedulerCenter.Core.Interface
         /// <param name="pageSize"></param>
         /// <returns></returns>
         Task<ApiResult<IEnumerable<TaskLogDTO>>> GetJobLogPage(string taskName, string groupName, int page, int pageSize = 5);
-       
+
 
     }
 }

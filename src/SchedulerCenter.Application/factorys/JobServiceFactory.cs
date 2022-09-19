@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SchedulerCenter.Application.factorys
+namespace SchedulerCenter.Application.Factorys
 {
   public  class JobServiceFactory
     {
@@ -19,15 +19,12 @@ namespace SchedulerCenter.Application.factorys
         private readonly IJobService _jobService;
         private readonly IJobService _jobRemoteService;
         public JobServiceFactory(IEnumerable<IJobService>jobServiceArr,IConfiguration configuration) {
-
-
             _configuration = configuration;
-         
             _jobService = jobServiceArr.FirstOrDefault(f=>f.GetType()==typeof(JobService));
             _jobRemoteService = jobServiceArr.FirstOrDefault(f => f.GetType() == typeof(JobRemoteService));
         }
 
-        /// <summary>8
+        /// <summary>
         /// GetService 获取Service
         /// </summary>
         /// <param name="schedName"></param>

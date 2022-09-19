@@ -7,7 +7,9 @@ namespace SchedulerCenter.Core.Common
 {
   public  class AppSetting
     {
-
+        /// <summary>
+        /// Token 
+        /// </summary>
         public string Token { get; set; }
         public  string SuperToken { get; set; }
 

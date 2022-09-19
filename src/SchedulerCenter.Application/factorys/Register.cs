@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SchedulerCenter.Application.factorys
+namespace SchedulerCenter.Application.Factorys
 {
   public  static class Register
     {

@@ -30,7 +30,7 @@ using SchedulerCenter.Host.Attributes;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using IGeekFan.AspNetCore.Knife4jUI;
 using SchedulerCenter.Core.Interface;
-using SchedulerCenter.Application.factorys;
+using SchedulerCenter.Application.Factorys;
 using SchedulerCenter.Core.Contant;
 
 namespace SchedulerCenter.Host

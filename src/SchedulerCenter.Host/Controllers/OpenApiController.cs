@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using SchedulerCenter.Application.factorys;
+using SchedulerCenter.Application.Factorys;
 using SchedulerCenter.Application.Services;
 using SchedulerCenter.Core.Common;
 using SchedulerCenter.Core.Interface;
@@ -36,7 +36,6 @@ namespace SchedulerCenter.Host.Controllers
         private readonly JobServiceFactory _jobServiceFactory;
 
         private readonly IConfiguration _configuration;
-        private IJobService _jobService;
         /// <summary>
         /// 开放API-构造器
         /// </summary>
