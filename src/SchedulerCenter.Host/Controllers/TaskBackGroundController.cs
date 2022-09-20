@@ -7,7 +7,7 @@ using SchedulerCenter.Core.Option;
 using SchedulerCenter.Application.Services;
 using SchedulerCenter.Core.Interface;
 using System;
-using SchedulerCenter.Application.factory;
+using SchedulerCenter.Application.Factorys;
 
 namespace SchedulerCenter.Host.Controllers
 {

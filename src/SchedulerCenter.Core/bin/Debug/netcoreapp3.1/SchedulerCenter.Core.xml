@@ -4,24 +4,19 @@
         <name>SchedulerCenter.Core</name>
     </assembly>
     <members>
-        <member name="P:SchedulerCenter.Core.Common.JwtConfig.Secret">
+        <member name="P:SchedulerCenter.Core.Common.AppSetting.Token">
             <summary>
-            密钥 长度不少于16位
+            Token 
             </summary>
         </member>
-        <member name="P:SchedulerCenter.Core.Common.JwtConfig.Issuer">
+        <member name="F:SchedulerCenter.Core.Contant.AppKey.JwtTokenKey">
             <summary>
-            发行人
+            JwtTokenKey
             </summary>
         </member>
-        <member name="P:SchedulerCenter.Core.Common.JwtConfig.Audience">
+        <member name="F:SchedulerCenter.Core.Contant.AppKey.SessionKey">
             <summary>
-            观众
-            </summary>
-        </member>
-        <member name="P:SchedulerCenter.Core.Common.JwtConfig.Expire">
-            <summary>
-            访问过期
+            SessionKey
             </summary>
         </member>
         <member name="T:SchedulerCenter.Core.Constant.HttpJobDetailKey">
@@ -47,6 +42,11 @@
         <member name="F:SchedulerCenter.Core.Constant.HttpJobDetailKey.ApiAuthValue">
             <summary>
             http-header-value
+            </summary>
+        </member>
+        <member name="T:SchedulerCenter.Core.Interface.IJobService">
+            <summary>
+            任务Service
             </summary>
         </member>
         <member name="M:SchedulerCenter.Core.Interface.IJobService.Init(System.String)">
@@ -184,6 +184,16 @@
         <member name="P:SchedulerCenter.Core.Request.AddJobRequest.SchedulerName">
             <summary>
             调取器名称
+            </summary>
+        </member>
+        <member name="T:SchedulerCenter.Core.Request.AuthorizationRequest">
+            <summary>
+            请求体-获取Token
+            </summary>
+        </member>
+        <member name="P:SchedulerCenter.Core.Request.AuthorizationRequest.Ticket">
+            <summary>
+            票据码
             </summary>
         </member>
         <member name="T:SchedulerCenter.Core.Request.PauseJobRequest">

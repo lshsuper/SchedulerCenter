@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using SchedulerCenter.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using SchedulerCenter.Core.Common;
 
 namespace SchedulerCenter.Host.Controllers
 {
@@ -59,7 +60,7 @@ namespace SchedulerCenter.Host.Controllers
         {
             //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            var appSetting = _configuration.GetAppSetting();
+            var appSetting = _configuration.Get<AppSetting>();
             string _token = appSetting.Token;
             string superToken = appSetting.SuperToken;
             if (!string.IsNullOrEmpty(token) && (token == _token || token == superToken))

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SchedulerCenter.Application.Services;
+using SchedulerCenter.Core.Common;
 using SchedulerCenter.Core.Interface;
 using SchedulerCenter.Infrastructure.Extensions;
 using System;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SchedulerCenter.Application.factory
+namespace SchedulerCenter.Application.Factorys
 {
   public  class JobServiceFactory
     {
@@ -18,15 +19,12 @@ namespace SchedulerCenter.Application.factory
         private readonly IJobService _jobService;
         private readonly IJobService _jobRemoteService;
         public JobServiceFactory(IEnumerable<IJobService>jobServiceArr,IConfiguration configuration) {
-
-
             _configuration = configuration;
-         
             _jobService = jobServiceArr.FirstOrDefault(f=>f.GetType()==typeof(JobService));
             _jobRemoteService = jobServiceArr.FirstOrDefault(f => f.GetType() == typeof(JobRemoteService));
         }
 
-        /// <summary>8
+        /// <summary>
         /// GetService 获取Service
         /// </summary>
         /// <param name="schedName"></param>
@@ -34,7 +32,7 @@ namespace SchedulerCenter.Application.factory
         public async Task<IJobService> GetService(string schedName) {
 
             //判断是远程还是本地
-            var appSetting = _configuration.GetAppSetting();
+            var appSetting = _configuration.Get<AppSetting>();
 
             if (appSetting.SchedulerName == schedName) {
                 //本地调度
@@ -46,10 +44,10 @@ namespace SchedulerCenter.Application.factory
 
         }
 
-        public async Task<IJobService> GetLocatService(string schedName)
+        public async Task<IJobService> GetLocatService()
         {
             //本地调度
-            return await _jobService.Init(schedName);           
+            return await _jobService.Init("");           
 
         }
 

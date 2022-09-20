@@ -2,7 +2,6 @@
 using SchedulerCenter.Core.DTO;
 using SchedulerCenter.Core.Option;
 using SchedulerCenter.Host.Models;
-using SchedulerCenter.Core.Option;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,7 +9,11 @@ using System.Threading.Tasks;
 
 namespace SchedulerCenter.Core.Interface
 {
-  public  interface IJobService
+
+    /// <summary>
+    /// 任务Service
+    /// </summary>
+    public interface IJobService
     {
 
 
@@ -101,7 +104,7 @@ namespace SchedulerCenter.Core.Interface
         /// <param name="pageSize"></param>
         /// <returns></returns>
         Task<ApiResult<IEnumerable<TaskLogDTO>>> GetJobLogPage(string taskName, string groupName, int page, int pageSize = 5);
-       
+
 
     }
 }

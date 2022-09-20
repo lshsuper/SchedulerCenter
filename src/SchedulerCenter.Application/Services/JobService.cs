@@ -1,37 +1,38 @@
 ﻿using Quartz.Impl.Triggers;
 using SchedulerCenter.Application.Jobs;
-using SchedulerCenter.Core.Common;
-using SchedulerCenter.Core.Model;
-using SchedulerCenter.Core.Option;
-using SchedulerCenter.Host.Models;
-using SchedulerCenter.Infrastructure.Dapper;
 using SchedulerCenter.Infrastructure.QuartzNet;
 using SchedulerCenter.Infrastructure.QuartzNet.OPT;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SchedulerCenter.Core.Constant;
+
 using SchedulerCenter.Infrastructure.Extensions;
-using SchedulerCenter.Core.DTO;
+using SchedulerCenter.Infrastructure.Dapper;
 using SchedulerCenter.Core.Interface;
+using SchedulerCenter.Core.Option;
+using SchedulerCenter.Core.Common;
+using SchedulerCenter.Core.Constant;
+using SchedulerCenter.Core.DTO;
+using SchedulerCenter.Host.Models;
+using SchedulerCenter.Core.Model;
 
 namespace SchedulerCenter.Application.Services
 {
-    public class JobService: IJobService
+    public class JobService: JobBaseService
     {
 
         private QuartzProvider _provider;
 
         private DapperProvider _dapperProvider;
-        public JobService(QuartzProvider provider, DapperProvider dapperProvider) {
+        public JobService(QuartzProvider provider, DapperProvider dapperProvider):base(dapperProvider) {
             _provider = provider;
             _dapperProvider = dapperProvider;
         }
 
 
 
-        public async Task<ApiResult<bool>> AddJob(TaskOPT opt)
+        public override async  Task<ApiResult<bool>> AddJob(TaskOPT opt)
         {
 
             //验证表达式
@@ -82,7 +83,7 @@ namespace SchedulerCenter.Application.Services
         /// <param name="jobName"></param>
         /// <param name="jobGroup"></param>
         /// <returns></returns>
-        public async Task<ApiResult<bool>> RemoveJob(string schedulerName, string jobName,string jobGroup) {
+        public override async Task<ApiResult<bool>> RemoveJob(string schedulerName, string jobName,string jobGroup) {
 
 
             try
@@ -115,7 +116,7 @@ namespace SchedulerCenter.Application.Services
         /// </summary>
         /// <param name="opt"></param>
         /// <returns></returns>
-        public async Task<ApiResult<bool>> UpdateJob(TaskOPT opt)
+        public override async Task<ApiResult<bool>> UpdateJob(TaskOPT opt)
         {
 
 
@@ -180,7 +181,7 @@ namespace SchedulerCenter.Application.Services
         /// <param name="triggerName"></param>
         /// <param name="triggerGroup"></param>
         /// <returns></returns>
-        public async Task<ApiResult<bool>> StartJob(string schedulerName, string triggerName,string triggerGroup) {
+        public override async Task<ApiResult<bool>> StartJob(string schedulerName, string triggerName,string triggerGroup) {
             try
             {
 
@@ -201,7 +202,7 @@ namespace SchedulerCenter.Application.Services
         /// <param name="triggerName"></param>
         /// <param name="triggerGroup"></param>
         /// <returns></returns>
-        public async Task<ApiResult<bool>> PauseJob(string schedulerName, string triggerName, string triggerGroup)
+        public override async Task<ApiResult<bool>> PauseJob(string schedulerName, string triggerName, string triggerGroup)
         {
             try
             {
@@ -222,7 +223,7 @@ namespace SchedulerCenter.Application.Services
         /// 获取任务列表
         /// </summary>
         /// <returns></returns>
-        public  async Task<ApiResult<IEnumerable<TaskOPT>>> GetJobs(string schedulerName)
+        public override async Task<ApiResult<IEnumerable<TaskOPT>>> GetJobs(string schedulerName)
         {
            
             try
@@ -270,7 +271,7 @@ namespace SchedulerCenter.Application.Services
         /// <param name="jobGroup"></param>
         /// <param name="jobName"></param>
         /// <returns></returns>
-        public async Task<ApiResult<bool>> RunJob(string schedulerName,string jobGroup, string jobName)
+        public override async Task<ApiResult<bool>> RunJob(string schedulerName,string jobGroup, string jobName)
         {
             try
             {
@@ -289,25 +290,10 @@ namespace SchedulerCenter.Application.Services
 
 
         
-        public async Task<int> Logger(LoggerOPT opt) {
+     
 
 
-            return await _dapperProvider.ExcuteAsync("insert into qrtz_logs(start_time,end_time,job_name,job_group,trigger_name,trigger_group,content,level)values(@start_time,@end_time,@job_name,@job_group,@trigger_name,@trigger_group,@content,@level)", new {
-                job_name=opt.JobName,
-                job_group=opt.JobGroup,
-                trigger_name=opt.TriggerName,
-                trigger_group=opt.TriggerGroup,
-                content=opt.Content,
-                level=opt.Level.ToString(),
-                start_time=opt.StartTime,
-                end_time=opt.EndTime,
-            });
-
-
-        }
-
-
-        public async Task<IEnumerable<SchedulerDTO>> GetAllSchedulers() {
+        public override async Task<IEnumerable<SchedulerDTO>> GetAllSchedulers() {
 
             var all = await _provider.GetAllSchedulers();
             return all.Select(s=> new SchedulerDTO() { 
@@ -318,26 +304,9 @@ namespace SchedulerCenter.Application.Services
         }
 
 
-        public async Task<ApiResult<IEnumerable<TaskLogDTO>>> GetJobLogPage(string taskName, string groupName, int page, int pageSize = 5) {
-
-
-            int offset = (page - 1) * pageSize;
-            string countSql = "select count(1) from qrtz_logs where job_name=@job_name and job_group=@job_group";
-            int count = await _dapperProvider.FindAsync<int>(countSql, new { job_name=taskName, job_group=groupName });
-            string dataSql = "select start_time 'StartTime',end_time 'Endtime',content 'Content' from qrtz_logs where job_name=@job_name and job_group=@job_group  order by id desc limit @offset,@limit";
-
-           var data = await _dapperProvider.QueryAsync<LogModel>(dataSql, new { job_name = taskName, job_group = groupName, offset=offset, limit=pageSize });
-
-            return ApiResult< IEnumerable < TaskLogDTO >>.OK(data.Select((s) => new TaskLogDTO
-            {
-                 Msg=s.Content,
-                 BeginDate=s.StartTime.ToString("yyyy-MM-dd HH:mm:ss:ms"),
-                 EndDate=s.EndTime.ToString("yyyy-MM-dd HH:mm:ss:ms"),
-            }));
-        }
-
       
-        Task<IJobService> IJobService.Init(string schedName)
+      
+       public override Task<IJobService> Init(string schedName)
         {
           
             return Task.FromResult<IJobService>(this);

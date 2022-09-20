@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SchedulerCenter.Core.Common
+namespace SchedulerCenter.Infrastructure.Jwt
 {
     public class JwtConfig
     {
