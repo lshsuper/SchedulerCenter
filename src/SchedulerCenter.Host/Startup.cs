@@ -38,18 +38,18 @@ namespace SchedulerCenter.Host
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
 
         }
 
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration _configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
-            var jwtConfig = Configuration.GetAppSetting().JwtConfig;
+            var jwtConfig = _configuration.GetAppSetting().JwtConfig;
 
             services.AddAuthentication(options =>
             {
@@ -223,7 +223,7 @@ namespace SchedulerCenter.Host
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
-            var appSetting = Configuration.GetAppSetting();
+            var appSetting = _configuration.GetAppSetting();
 
             ServiceLocator.Init(app.ApplicationServices);
             if (env.IsDevelopment())

@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulerCenter.Host", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulerCenter.Application", "src\SchedulerCenter.Application\SchedulerCenter.Application.csproj", "{1F6B739A-3264-47EC-A415-6868C36651F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerCenter.Core", "src\SchedulerCenter.Core\SchedulerCenter.Core.csproj", "{270A0324-D122-4E29-BB27-C8B8BE489582}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulerCenter.Core", "src\SchedulerCenter.Core\SchedulerCenter.Core.csproj", "{270A0324-D122-4E29-BB27-C8B8BE489582}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerCenter.Infrastructure", "src\SchedulerCenter.Infrastructure\SchedulerCenter.Infrastructure.csproj", "{99E961F9-1591-4F31-A6E5-65C18664DA06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulerCenter.Infrastructure", "src\SchedulerCenter.Infrastructure\SchedulerCenter.Infrastructure.csproj", "{99E961F9-1591-4F31-A6E5-65C18664DA06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
