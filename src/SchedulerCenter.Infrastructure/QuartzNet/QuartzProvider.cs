@@ -117,6 +117,7 @@ namespace SchedulerCenter.Infrastructure.QuartzNet
      
         public async Task UnscheduleJob(string schedulerName, string triggerKey,string triggerGroup) {
             var  scheduler = await GetScheduler(schedulerName);
+           
             await scheduler.UnscheduleJob(new TriggerKey(triggerKey, triggerGroup));
             return ;
         }
